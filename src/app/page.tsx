@@ -21,51 +21,37 @@ import {
 } from 'lucide-react';
 
 export default function Resume() {
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeTab, setActiveTab] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const parallaxRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-      const sections = [
-        'home',
-        'about',
-        'skills',
-        'experience',
-        'projects',
-        'education',
-        'contact',
-      ];
-      const current = sections.find((section) => {
-        const element = document.getElementById(section);
+
+      // Determine active tab based on scroll position
+      const sections = ['home', 'about', 'experience', 'projects', 'contact'];
+      for (const section of sections) {
+        const element = sectionRefs.current[section];
         if (element) {
           const rect = element.getBoundingClientRect();
-          return rect.top <= 200 && rect.bottom >= 200;
+          if (rect.top <= 300 && rect.bottom >= 300) {
+            setActiveTab(section);
+            break;
+          }
         }
-        return false;
-      });
-      if (current) setActiveSection(current);
-
-      // Parallax effects
-      parallaxRefs.current.forEach((ref, index) => {
-        if (ref) {
-          const scrolled = window.pageYOffset;
-          const rate = scrolled * (0.3 + index * 0.1);
-          ref.style.transform = `translateY(${rate}px)`;
-        }
-      });
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
+  const scrollToTab = (tabId: string) => {
+    const element = sectionRefs.current[tabId];
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setIsMenuOpen(false);
     }
   };
@@ -76,96 +62,99 @@ export default function Resume() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation - Wix Style */}
+      {/* Navigation Bar - Wix Style Exact */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled ? 'bg-white shadow-sm' : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="text-2xl font-normal text-gray-900 tracking-wide">
+        <div className="max-w-[1920px] mx-auto px-[60px]">
+          <div className="flex justify-between items-center h-[80px]">
+            <div
+              className="text-[28px] font-normal text-[#1a1a1a] cursor-pointer"
+              onClick={() => scrollToTab('home')}
+            >
               HR
             </div>
-            <div className="hidden md:flex items-center space-x-10">
-              {['home', 'about', 'experience', 'projects', 'contact'].map(
-                (section) => (
-                  <button
-                    key={section}
-                    onClick={() => scrollToSection(section)}
-                    className={`text-sm font-normal tracking-wide transition-colors ${
-                      activeSection === section
-                        ? 'text-gray-900'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    {section.charAt(0).toUpperCase() + section.slice(1)}
-                  </button>
-                )
-              )}
+            <div className="hidden md:flex items-center space-x-[40px]">
+              {[
+                { id: 'home', label: 'Home' },
+                { id: 'about', label: 'About' },
+                { id: 'experience', label: 'Experience' },
+                { id: 'projects', label: 'Projects' },
+                { id: 'contact', label: 'Contact' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => scrollToTab(tab.id)}
+                  className={`text-[14px] font-normal tracking-[0.5px] transition-colors ${
+                    activeTab === tab.id
+                      ? 'text-[#1a1a1a]'
+                      : 'text-[#666] hover:text-[#1a1a1a]'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-gray-900"
+              className="md:hidden text-[#1a1a1a]"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t">
-            <div className="px-8 py-6 space-y-4">
-              {['home', 'about', 'experience', 'projects', 'contact'].map(
-                (section) => (
-                  <button
-                    key={section}
-                    onClick={() => scrollToSection(section)}
-                    className={`block w-full text-left text-sm font-normal ${
-                      activeSection === section
-                        ? 'text-gray-900'
-                        : 'text-gray-600'
-                    }`}
-                  >
-                    {section.charAt(0).toUpperCase() + section.slice(1)}
-                  </button>
-                )
-              )}
+          <div className="md:hidden bg-white border-t border-[#e5e5e5]">
+            <div className="px-[60px] py-6 space-y-4">
+              {[
+                { id: 'home', label: 'Home' },
+                { id: 'about', label: 'About' },
+                { id: 'experience', label: 'Experience' },
+                { id: 'projects', label: 'Projects' },
+                { id: 'contact', label: 'Contact' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => scrollToTab(tab.id)}
+                  className={`block w-full text-left text-[14px] font-normal ${
+                    activeTab === tab.id ? 'text-[#1a1a1a]' : 'text-[#666]'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
           </div>
         )}
       </nav>
 
-      {/* Hero Section - Full Screen Wix Style */}
-      <section
+      {/* Home Page/Tab - Full Screen Hero */}
+      <div
         id="home"
+        ref={(el) => (sectionRefs.current['home'] = el)}
         className="min-h-screen flex items-center justify-center relative bg-white overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white" />
-        <div
-          ref={(el) => (parallaxRefs.current[0] = el)}
-          className="absolute inset-0 opacity-5"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000' fill-opacity='1'/%3E%3C/svg%3E")`,
-          }}
-        />
-        <div className="max-w-7xl mx-auto px-8 text-center relative z-10">
-          <div className="space-y-8">
-            <h1 className="text-8xl md:text-9xl font-light text-gray-900 leading-tight tracking-tight">
+        <div className="absolute inset-0 bg-[#fafafa]" />
+        <div className="max-w-[1920px] mx-auto px-[60px] w-full text-center relative z-10">
+          <div className="space-y-[40px]">
+            <h1 className="text-[120px] md:text-[140px] font-light text-[#1a1a1a] leading-[1.1] tracking-[-2px]">
               Hassan
               <br />
               <span className="font-extralight">Raza</span>
             </h1>
-            <div className="w-32 h-0.5 bg-gray-900 mx-auto" />
-            <p className="text-3xl md:text-4xl font-light text-gray-700 mt-12 tracking-wide">
+            <div className="w-[80px] h-[1px] bg-[#1a1a1a] mx-auto" />
+            <p className="text-[32px] md:text-[40px] font-light text-[#666] mt-[60px] tracking-[-0.5px]">
               Full Stack Developer
             </p>
-            <p className="text-lg md:text-xl font-light text-gray-500 max-w-2xl mx-auto mt-6">
+            <p className="text-[18px] md:text-[20px] font-light text-[#999] max-w-[600px] mx-auto mt-[30px] leading-relaxed">
               Crafting digital experiences with modern technologies
             </p>
-            <div className="flex flex-wrap justify-center gap-6 mt-16">
+            <div className="flex flex-wrap justify-center gap-[20px] mt-[80px]">
               <a
                 href="mailto:itzhassanraza276@gmail.com"
-                className="group inline-flex items-center gap-2 bg-gray-900 text-white px-10 py-4 hover:bg-gray-800 transition-all duration-300 text-sm font-normal tracking-wide uppercase"
+                className="group inline-flex items-center gap-[12px] bg-[#1a1a1a] text-white px-[40px] py-[16px] hover:bg-[#333] transition-all duration-300 text-[14px] font-normal tracking-[1px] uppercase"
               >
                 Get In Touch
                 <ArrowRight
@@ -175,66 +164,67 @@ export default function Resume() {
               </a>
               <button
                 onClick={generatePDF}
-                className="inline-flex items-center gap-2 border-2 border-gray-900 text-gray-900 px-10 py-4 hover:bg-gray-900 hover:text-white transition-all duration-300 text-sm font-normal tracking-wide uppercase"
+                className="inline-flex items-center gap-[12px] border-2 border-[#1a1a1a] text-[#1a1a1a] px-[40px] py-[16px] hover:bg-[#1a1a1a] hover:text-white transition-all duration-300 text-[14px] font-normal tracking-[1px] uppercase"
               >
                 <Download size={18} />
                 Download CV
               </button>
             </div>
-            <div className="flex justify-center mt-20">
+            <div className="flex justify-center mt-[100px]">
               <button
-                onClick={() => scrollToSection('about')}
-                className="text-gray-400 hover:text-gray-900 transition-colors animate-bounce"
+                onClick={() => scrollToTab('about')}
+                className="text-[#999] hover:text-[#1a1a1a] transition-colors animate-bounce"
               >
                 <ChevronDown size={40} />
               </button>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* About Section - Wix Style */}
-      <section
+      {/* About Page/Tab */}
+      <div
         id="about"
-        className="min-h-screen flex items-center py-32 bg-white"
+        ref={(el) => (sectionRefs.current['about'] = el)}
+        className="min-h-screen flex items-center py-[120px] bg-white"
       >
-        <div className="max-w-7xl mx-auto px-8 w-full">
-          <div className="grid md:grid-cols-2 gap-20 items-center">
+        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
+          <div className="grid md:grid-cols-2 gap-[120px] items-center">
             <div>
-              <h2 className="text-6xl md:text-7xl font-light text-gray-900 mb-12 tracking-tight">
+              <h2 className="text-[80px] md:text-[100px] font-light text-[#1a1a1a] mb-[60px] tracking-[-2px]">
                 About
               </h2>
-              <div className="w-20 h-0.5 bg-gray-900 mb-12" />
+              <div className="w-[60px] h-[1px] bg-[#1a1a1a] mb-[60px]" />
             </div>
-            <div className="space-y-8">
-              <p className="text-xl font-light text-gray-700 leading-relaxed">
+            <div className="space-y-[30px]">
+              <p className="text-[20px] font-light text-[#666] leading-[1.8]">
                 Results-driven Full Stack Developer with 4+ years of
                 professional experience in designing, developing, and deploying
                 scalable web applications.
               </p>
-              <p className="text-xl font-light text-gray-700 leading-relaxed">
+              <p className="text-[20px] font-light text-[#666] leading-[1.8]">
                 Expert in modern JavaScript frameworks (React.js, Next.js,
                 Node.js, Nest.js) and full MERN/PERN stack development. Proven
                 track record of successfully delivering complex enterprise-level
                 projects including ERP systems, admission portals, e-commerce
                 platforms, and real-time management systems.
               </p>
-              <div className="pt-8 space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-gray-900 rounded-full" />
-                  <span className="text-gray-700 font-light text-lg">
+              <div className="pt-[40px] space-y-[20px]">
+                <div className="flex items-center gap-[16px]">
+                  <div className="w-[6px] h-[6px] bg-[#1a1a1a] rounded-full" />
+                  <span className="text-[#666] font-light text-[18px]">
                     4+ Years Experience
                   </span>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-gray-900 rounded-full" />
-                  <span className="text-gray-700 font-light text-lg">
+                <div className="flex items-center gap-[16px]">
+                  <div className="w-[6px] h-[6px] bg-[#1a1a1a] rounded-full" />
+                  <span className="text-[#666] font-light text-[18px]">
                     20+ Projects Completed
                   </span>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-gray-900 rounded-full" />
-                  <span className="text-gray-700 font-light text-lg">
+                <div className="flex items-center gap-[16px]">
+                  <div className="w-[6px] h-[6px] bg-[#1a1a1a] rounded-full" />
+                  <span className="text-[#666] font-light text-[18px]">
                     MERN & PERN Stack Specialist
                   </span>
                 </div>
@@ -242,21 +232,18 @@ export default function Resume() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Skills Section - Wix Style Grid */}
-      <section
-        id="skills"
-        className="min-h-screen flex items-center py-32 bg-gray-50"
-      >
-        <div className="max-w-7xl mx-auto px-8 w-full">
-          <div className="text-center mb-24">
-            <h2 className="text-6xl md:text-7xl font-light text-gray-900 mb-6 tracking-tight">
+      {/* Skills Section */}
+      <div className="min-h-screen flex items-center py-[120px] bg-[#fafafa]">
+        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
+          <div className="text-center mb-[100px]">
+            <h2 className="text-[80px] md:text-[100px] font-light text-[#1a1a1a] mb-[40px] tracking-[-2px]">
               Skills
             </h2>
-            <div className="w-20 h-0.5 bg-gray-900 mx-auto" />
+            <div className="w-[60px] h-[1px] bg-[#1a1a1a] mx-auto" />
           </div>
-          <div className="grid md:grid-cols-3 gap-16">
+          <div className="grid md:grid-cols-3 gap-[80px]">
             {[
               {
                 title: 'Frontend Development',
@@ -295,17 +282,17 @@ export default function Resume() {
                 ],
               },
             ].map((category, index) => (
-              <div key={index} className="space-y-8">
-                <h3 className="text-2xl font-light text-gray-900 border-b border-gray-300 pb-4">
+              <div key={index} className="space-y-[30px]">
+                <h3 className="text-[28px] font-light text-[#1a1a1a] border-b border-[#e5e5e5] pb-[20px]">
                   {category.title}
                 </h3>
-                <ul className="space-y-4">
+                <ul className="space-y-[16px]">
                   {category.skills.map((skill) => (
                     <li
                       key={skill}
-                      className="text-gray-700 font-light text-lg flex items-center gap-3"
+                      className="text-[#666] font-light text-[18px] flex items-center gap-[12px]"
                     >
-                      <div className="w-1.5 h-1.5 bg-gray-900 rounded-full" />
+                      <div className="w-[4px] h-[4px] bg-[#1a1a1a] rounded-full" />
                       {skill}
                     </li>
                   ))}
@@ -314,21 +301,22 @@ export default function Resume() {
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Experience Section - Wix Timeline Style */}
-      <section
+      {/* Experience Page/Tab */}
+      <div
         id="experience"
-        className="min-h-screen flex items-center py-32 bg-white"
+        ref={(el) => (sectionRefs.current['experience'] = el)}
+        className="min-h-screen flex items-center py-[120px] bg-white"
       >
-        <div className="max-w-7xl mx-auto px-8 w-full">
-          <div className="mb-24">
-            <h2 className="text-6xl md:text-7xl font-light text-gray-900 mb-6 tracking-tight">
+        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
+          <div className="mb-[100px]">
+            <h2 className="text-[80px] md:text-[100px] font-light text-[#1a1a1a] mb-[40px] tracking-[-2px]">
               Experience
             </h2>
-            <div className="w-20 h-0.5 bg-gray-900" />
+            <div className="w-[60px] h-[1px] bg-[#1a1a1a]" />
           </div>
-          <div className="space-y-20">
+          <div className="space-y-[80px]">
             {[
               {
                 title: 'Next.js Developer',
@@ -380,33 +368,33 @@ export default function Resume() {
             ].map((exp, index) => (
               <div
                 key={index}
-                className="border-l-2 border-gray-300 pl-12 relative"
+                className="border-l-2 border-[#e5e5e5] pl-[60px] relative"
               >
-                <div className="absolute -left-2.5 top-0 w-5 h-5 bg-white border-2 border-gray-900 rounded-full" />
-                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
+                <div className="absolute -left-[7px] top-0 w-[14px] h-[14px] bg-white border-2 border-[#1a1a1a] rounded-full" />
+                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-[30px]">
                   <div>
-                    <h3 className="text-3xl font-light text-gray-900 mb-3">
+                    <h3 className="text-[36px] font-light text-[#1a1a1a] mb-[12px]">
                       {exp.title}
                     </h3>
-                    <p className="text-xl text-gray-600 font-light mb-2">
+                    <p className="text-[24px] text-[#666] font-light mb-[8px]">
                       {exp.company}
                     </p>
-                    <p className="text-base text-gray-500 font-light flex items-center gap-2">
+                    <p className="text-[16px] text-[#999] font-light flex items-center gap-[8px]">
                       <MapPin size={16} />
                       {exp.location}
                     </p>
                   </div>
-                  <span className="text-base text-gray-500 font-light mt-4 md:mt-0">
+                  <span className="text-[16px] text-[#999] font-light mt-[20px] md:mt-0">
                     {exp.period}
                   </span>
                 </div>
-                <ul className="space-y-3 mt-6">
+                <ul className="space-y-[12px] mt-[30px]">
                   {exp.description.map((point, i) => (
                     <li
                       key={i}
-                      className="text-gray-700 font-light text-lg flex items-start gap-4"
+                      className="text-[#666] font-light text-[18px] flex items-start gap-[16px]"
                     >
-                      <div className="w-2 h-2 bg-gray-400 rounded-full mt-2 flex-shrink-0" />
+                      <div className="w-[6px] h-[6px] bg-[#999] rounded-full mt-[8px] flex-shrink-0" />
                       <span>{point}</span>
                     </li>
                   ))}
@@ -415,21 +403,22 @@ export default function Resume() {
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Projects Section - Wix Style Grid */}
-      <section
+      {/* Projects Page/Tab */}
+      <div
         id="projects"
-        className="min-h-screen flex items-center py-32 bg-gray-50"
+        ref={(el) => (sectionRefs.current['projects'] = el)}
+        className="min-h-screen flex items-center py-[120px] bg-[#fafafa]"
       >
-        <div className="max-w-7xl mx-auto px-8 w-full">
-          <div className="mb-24">
-            <h2 className="text-6xl md:text-7xl font-light text-gray-900 mb-6 tracking-tight">
+        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
+          <div className="mb-[100px]">
+            <h2 className="text-[80px] md:text-[100px] font-light text-[#1a1a1a] mb-[40px] tracking-[-2px]">
               Projects
             </h2>
-            <div className="w-20 h-0.5 bg-gray-900" />
+            <div className="w-[60px] h-[1px] bg-[#1a1a1a]" />
           </div>
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-[40px]">
             {[
               {
                 title: 'University Admission Portal',
@@ -500,29 +489,29 @@ export default function Resume() {
             ].map((project, index) => (
               <div
                 key={index}
-                className="bg-white p-10 border border-gray-200 hover:border-gray-900 transition-all duration-300 group"
+                className="bg-white p-[50px] border border-[#e5e5e5] hover:border-[#1a1a1a] transition-all duration-300 group"
               >
-                <h3 className="text-3xl font-light text-gray-900 mb-4 group-hover:text-gray-700">
+                <h3 className="text-[32px] font-light text-[#1a1a1a] mb-[20px] group-hover:text-[#666]">
                   {project.title}
                 </h3>
-                <p className="text-gray-600 font-light mb-6 leading-relaxed text-lg">
+                <p className="text-[#666] font-light mb-[30px] leading-[1.8] text-[18px]">
                   {project.description}
                 </p>
-                <div className="mb-6">
-                  <p className="text-xs font-light text-gray-500 uppercase tracking-widest mb-3">
+                <div className="mb-[30px]">
+                  <p className="text-[12px] font-light text-[#999] uppercase tracking-[2px] mb-[12px]">
                     Tech Stack
                   </p>
-                  <p className="text-base text-gray-900 font-light">
+                  <p className="text-[16px] text-[#1a1a1a] font-light">
                     {project.tech}
                   </p>
                 </div>
-                <ul className="space-y-3">
+                <ul className="space-y-[12px]">
                   {project.features.map((feature, i) => (
                     <li
                       key={i}
-                      className="text-base text-gray-700 font-light flex items-center gap-3"
+                      className="text-[#666] font-light text-[16px] flex items-center gap-[12px]"
                     >
-                      <div className="w-1.5 h-1.5 bg-gray-900 rounded-full" />
+                      <div className="w-[4px] h-[4px] bg-[#1a1a1a] rounded-full" />
                       {feature}
                     </li>
                   ))}
@@ -531,34 +520,31 @@ export default function Resume() {
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Education Section */}
-      <section
-        id="education"
-        className="min-h-screen flex items-center py-32 bg-white"
-      >
-        <div className="max-w-7xl mx-auto px-8 w-full">
-          <div className="mb-24">
-            <h2 className="text-6xl md:text-7xl font-light text-gray-900 mb-6 tracking-tight">
+      <div className="min-h-screen flex items-center py-[120px] bg-white">
+        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
+          <div className="mb-[100px]">
+            <h2 className="text-[80px] md:text-[100px] font-light text-[#1a1a1a] mb-[40px] tracking-[-2px]">
               Education
             </h2>
-            <div className="w-20 h-0.5 bg-gray-900" />
+            <div className="w-[60px] h-[1px] bg-[#1a1a1a]" />
           </div>
-          <div className="max-w-4xl">
-            <div className="border-l-2 border-gray-300 pl-12 relative">
-              <div className="absolute -left-2.5 top-0 w-5 h-5 bg-white border-2 border-gray-900 rounded-full" />
-              <h3 className="text-3xl font-light text-gray-900 mb-4">
+          <div className="max-w-[1000px]">
+            <div className="border-l-2 border-[#e5e5e5] pl-[60px] relative">
+              <div className="absolute -left-[7px] top-0 w-[14px] h-[14px] bg-white border-2 border-[#1a1a1a] rounded-full" />
+              <h3 className="text-[36px] font-light text-[#1a1a1a] mb-[12px]">
                 Bachelor of Science in Computer Science (BSCS)
               </h3>
-              <p className="text-xl text-gray-600 font-light mb-3">
+              <p className="text-[24px] text-[#666] font-light mb-[8px]">
                 Muhammad Nawaz Sharif University of Engineering & Technology,
                 Multan
               </p>
-              <p className="text-base text-gray-500 font-light mb-6">
+              <p className="text-[16px] text-[#999] font-light mb-[30px]">
                 2021 - 2025
               </p>
-              <p className="text-gray-700 font-light leading-relaxed text-lg">
+              <p className="text-[#666] font-light leading-[1.8] text-[18px]">
                 Comprehensive computer science education covering software
                 engineering, data structures, algorithms, database systems, and
                 web technologies.
@@ -566,28 +552,29 @@ export default function Resume() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Contact Section - Wix Style */}
-      <section
+      {/* Contact Page/Tab */}
+      <div
         id="contact"
-        className="min-h-screen flex items-center py-32 bg-gray-900 text-white"
+        ref={(el) => (sectionRefs.current['contact'] = el)}
+        className="min-h-screen flex items-center py-[120px] bg-[#1a1a1a] text-white"
       >
-        <div className="max-w-7xl mx-auto px-8 w-full">
-          <div className="mb-24">
-            <h2 className="text-6xl md:text-7xl font-light mb-6 tracking-tight">
+        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
+          <div className="mb-[100px]">
+            <h2 className="text-[80px] md:text-[100px] font-light mb-[40px] tracking-[-2px]">
               Contact
             </h2>
-            <div className="w-20 h-0.5 bg-white" />
+            <div className="w-[60px] h-[1px] bg-white" />
           </div>
-          <div className="grid md:grid-cols-2 gap-20">
+          <div className="grid md:grid-cols-2 gap-[120px]">
             <div>
-              <p className="text-xl font-light text-gray-300 mb-12 leading-relaxed">
+              <p className="text-[20px] font-light text-[#999] mb-[60px] leading-[1.8]">
                 I'm always open to discussing new projects, creative ideas, or
                 opportunities to be part of your visions.
               </p>
             </div>
-            <div className="space-y-8">
+            <div className="space-y-[40px]">
               {[
                 {
                   icon: Mail,
@@ -613,28 +600,28 @@ export default function Resume() {
                   <Component
                     key={index}
                     href={contact.href || undefined}
-                    className={`flex items-start gap-6 group ${
-                      contact.href
-                        ? 'hover:text-gray-300 transition-colors'
-                        : ''
+                    className={`flex items-start gap-[24px] group ${
+                      contact.href ? 'hover:text-[#999] transition-colors' : ''
                     }`}
                   >
-                    <contact.icon size={24} className="text-gray-400 mt-1" />
+                    <contact.icon size={24} className="text-[#666] mt-[4px]" />
                     <div>
-                      <div className="text-xs font-light text-gray-400 uppercase tracking-widest mb-2">
+                      <div className="text-[12px] font-light text-[#666] uppercase tracking-[2px] mb-[8px]">
                         {contact.label}
                       </div>
-                      <div className="text-lg font-light">{contact.value}</div>
+                      <div className="text-[18px] font-light">
+                        {contact.value}
+                      </div>
                     </div>
                   </Component>
                 );
               })}
-              <div className="flex gap-6 pt-8">
+              <div className="flex gap-[24px] pt-[40px]">
                 <a
                   href="https://linkedin.com/in/hassan-raza-42280221b"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-[#666] hover:text-white transition-colors"
                 >
                   <Linkedin size={28} />
                 </a>
@@ -642,7 +629,7 @@ export default function Resume() {
                   href="https://github.com/hassan-raza-111"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-[#666] hover:text-white transition-colors"
                 >
                   <Github size={28} />
                 </a>
@@ -650,7 +637,7 @@ export default function Resume() {
                   href="https://github.com/hassan-raza123"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-[#666] hover:text-white transition-colors"
                 >
                   <Github size={28} />
                 </a>
@@ -658,13 +645,13 @@ export default function Resume() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Footer */}
-      <footer className="bg-gray-900 border-t border-gray-800 py-16">
-        <div className="max-w-7xl mx-auto px-8">
+      <footer className="bg-[#1a1a1a] border-t border-[#333] py-[60px]">
+        <div className="max-w-[1920px] mx-auto px-[60px]">
           <div className="text-center">
-            <p className="text-gray-400 font-light text-base">
+            <p className="text-[#666] font-light text-[14px]">
               © 2025 Hassan Raza. All rights reserved.
             </p>
           </div>
@@ -679,7 +666,8 @@ export default function Resume() {
           button {
             display: none !important;
           }
-          section {
+          section,
+          div[id] {
             page-break-inside: avoid;
           }
         }
