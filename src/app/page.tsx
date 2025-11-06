@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Mail,
   Phone,
@@ -17,12 +17,16 @@ import {
   ExternalLink,
   Download,
   ChevronDown,
+  ArrowRight,
+  CheckCircle,
+  Star,
 } from 'lucide-react';
 
 export default function Resume() {
   const [activeSection, setActiveSection] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const parallaxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,11 +44,17 @@ export default function Resume() {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
+          return rect.top <= 150 && rect.bottom >= 150;
         }
         return false;
       });
       if (current) setActiveSection(current);
+
+      // Parallax effect
+      if (parallaxRef.current) {
+        const scrolled = window.pageYOffset;
+        parallaxRef.current.style.transform = `translateY(${scrolled * 0.5}px)`;
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -65,36 +75,28 @@ export default function Resume() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation Bar */}
+      {/* Minimal Navigation Bar */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-lg'
+            ? 'bg-white shadow-md border-b border-gray-100'
             : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 md:h-20">
-            <div className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            <div className="text-2xl font-light tracking-wider text-gray-900">
               HR
             </div>
-            <div className="hidden md:flex space-x-8">
-              {[
-                'home',
-                'about',
-                'skills',
-                'experience',
-                'projects',
-                'education',
-                'contact',
-              ].map((section) => (
+            <div className="hidden md:flex items-center space-x-10">
+              {['home', 'about', 'experience', 'projects', 'contact'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
-                  className={`capitalize transition-colors ${
+                  className={`text-sm font-light tracking-widest uppercase transition-all duration-300 ${
                     activeSection === section
-                      ? 'text-blue-600 font-semibold'
-                      : 'text-gray-700 hover:text-blue-600'
+                      ? 'text-gray-900 border-b-2 border-gray-900 pb-1'
+                      : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
                   {section}
@@ -102,15 +104,8 @@ export default function Resume() {
               ))}
             </div>
             <button
-              onClick={generatePDF}
-              className="hidden md:flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              <Download size={18} />
-              <span>Download CV</span>
-            </button>
-            <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-gray-700"
+              className="md:hidden text-gray-900"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -118,89 +113,72 @@ export default function Resume() {
         </div>
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t">
-            <div className="px-4 py-4 space-y-3">
-              {[
-                'home',
-                'about',
-                'skills',
-                'experience',
-                'projects',
-                'education',
-                'contact',
-              ].map((section) => (
+          <div className="md:hidden bg-white border-t border-gray-100">
+            <div className="px-6 py-6 space-y-4">
+              {['home', 'about', 'experience', 'projects', 'contact'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
-                  className={`block w-full text-left capitalize py-2 ${
-                    activeSection === section
-                      ? 'text-blue-600 font-semibold'
-                      : 'text-gray-700'
+                  className={`block w-full text-left text-sm font-light tracking-widest uppercase py-2 ${
+                    activeSection === section ? 'text-gray-900' : 'text-gray-600'
                   }`}
                 >
                   {section}
                 </button>
               ))}
-              <button
-                onClick={generatePDF}
-                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg w-full justify-center mt-4"
-              >
-                <Download size={18} />
-                <span>Download CV</span>
-              </button>
             </div>
           </div>
         )}
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section with Parallax */}
       <section
         id="home"
-        className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 pt-20"
+        className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-b from-gray-50 to-white"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="animate-fade-in">
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Hassan Raza
-            </h1>
-            <p className="text-2xl md:text-3xl text-gray-700 mb-6">
-              Senior Full Stack Developer
-            </p>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              MERN & PERN Stack Specialist | 4+ Years of Experience | Building
-              Scalable Web Applications
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div
+          ref={parallaxRef}
+          className="absolute inset-0 opacity-5"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-7xl md:text-9xl font-light tracking-tight text-gray-900 leading-none">
+                Hassan
+                <br />
+                <span className="font-extralight">Raza</span>
+              </h1>
+              <div className="w-24 h-px bg-gray-900 mx-auto" />
+              <p className="text-xl md:text-2xl font-light text-gray-600 tracking-wide mt-8">
+                Full Stack Developer
+              </p>
+              <p className="text-base md:text-lg font-light text-gray-500 max-w-2xl mx-auto mt-4">
+                Crafting digital experiences with modern technologies
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4 mt-12">
               <a
                 href="mailto:itzhassanraza276@gmail.com"
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all transform hover:scale-105"
+                className="group flex items-center gap-2 border-2 border-gray-900 text-gray-900 px-8 py-3 hover:bg-gray-900 hover:text-white transition-all duration-300 text-sm font-light tracking-widest uppercase"
               >
-                <Mail size={20} />
-                <span>Get In Touch</span>
+                Get In Touch
+                <ArrowRight size={16} className="transform group-hover:translate-x-1 transition-transform" />
               </a>
-              <a
-                href="https://linkedin.com/in/hassan-raza-42280221b"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-white hover:bg-gray-100 text-gray-700 border-2 border-gray-300 px-6 py-3 rounded-lg transition-all transform hover:scale-105"
+              <button
+                onClick={generatePDF}
+                className="flex items-center gap-2 border-2 border-gray-300 text-gray-700 px-8 py-3 hover:border-gray-900 hover:text-gray-900 transition-all duration-300 text-sm font-light tracking-widest uppercase"
               >
-                <Linkedin size={20} />
-                <span>LinkedIn</span>
-              </a>
-              <a
-                href="https://github.com/hassan-raza-111"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-white hover:bg-gray-100 text-gray-700 border-2 border-gray-300 px-6 py-3 rounded-lg transition-all transform hover:scale-105"
-              >
-                <Github size={20} />
-                <span>GitHub</span>
-              </a>
+                <Download size={16} />
+                Download CV
+              </button>
             </div>
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-16">
               <button
                 onClick={() => scrollToSection('about')}
-                className="animate-bounce text-gray-600 hover:text-blue-600"
+                className="text-gray-400 hover:text-gray-900 transition-colors animate-bounce"
               >
                 <ChevronDown size={32} />
               </button>
@@ -209,65 +187,59 @@ export default function Resume() {
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            About Me
-          </h2>
-          <div className="max-w-4xl mx-auto">
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              Results-driven Full Stack Developer with 4+ years of professional
-              experience in designing, developing, and deploying scalable web
-              applications. Expert in modern JavaScript frameworks (React.js,
-              Next.js, Node.js, Nest.js) and full MERN/PERN stack development.
-            </p>
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              Proven track record of successfully delivering complex
-              enterprise-level projects including ERP systems, admission
-              portals, e-commerce platforms, and real-time management systems.
-              Strong background in both frontend and backend development with
-              expertise in database design, REST APIs, and cloud deployment.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-              <div className="text-center p-6 bg-blue-50 rounded-lg">
-                <div className="text-3xl font-bold text-blue-600 mb-2">4+</div>
-                <div className="text-gray-700">Years Experience</div>
-              </div>
-              <div className="text-center p-6 bg-purple-50 rounded-lg">
-                <div className="text-3xl font-bold text-purple-600 mb-2">
-                  20+
+      {/* About Section - Clean & Minimal */}
+      <section id="about" className="py-32 bg-white">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-5xl md:text-6xl font-light text-gray-900 mb-8 tracking-tight">
+                About
+              </h2>
+              <div className="w-16 h-px bg-gray-900 mb-8" />
+            </div>
+            <div className="space-y-6">
+              <p className="text-lg font-light text-gray-700 leading-relaxed">
+                Results-driven Full Stack Developer with 4+ years of professional experience in
+                designing, developing, and deploying scalable web applications.
+              </p>
+              <p className="text-lg font-light text-gray-700 leading-relaxed">
+                Expert in modern JavaScript frameworks (React.js, Next.js, Node.js, Nest.js) and
+                full MERN/PERN stack development. Proven track record of successfully delivering
+                complex enterprise-level projects.
+              </p>
+              <div className="pt-8 space-y-4">
+                <div className="flex items-center gap-4">
+                  <CheckCircle size={20} className="text-gray-900 flex-shrink-0" />
+                  <span className="text-gray-700 font-light">4+ Years Experience</span>
                 </div>
-                <div className="text-gray-700">Projects Completed</div>
-              </div>
-              <div className="text-center p-6 bg-green-50 rounded-lg">
-                <div className="text-3xl font-bold text-green-600 mb-2">5+</div>
-                <div className="text-gray-700">Technologies</div>
+                <div className="flex items-center gap-4">
+                  <CheckCircle size={20} className="text-gray-900 flex-shrink-0" />
+                  <span className="text-gray-700 font-light">20+ Projects Completed</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <CheckCircle size={20} className="text-gray-900 flex-shrink-0" />
+                  <span className="text-gray-700 font-light">MERN & PERN Stack Specialist</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section
-        id="skills"
-        className="py-20 bg-gradient-to-br from-gray-50 to-blue-50"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            Technical Skills
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-              <div className="flex items-center gap-3 mb-4">
-                <Code size={24} className="text-blue-600" />
-                <h3 className="text-xl font-semibold text-gray-800">
-                  Frontend
-                </h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {[
+      {/* Skills Section - Professional Grid */}
+      <section id="skills" className="py-32 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-6xl font-light text-gray-900 mb-4 tracking-tight">
+              Skills
+            </h2>
+            <div className="w-16 h-px bg-gray-900 mx-auto" />
+          </div>
+          <div className="grid md:grid-cols-3 gap-12">
+            {[
+              {
+                title: 'Frontend',
+                skills: [
                   'HTML5',
                   'CSS3',
                   'JavaScript',
@@ -277,294 +249,150 @@ export default function Resume() {
                   'Redux',
                   'Tailwind CSS',
                   'Bootstrap',
-                ].map((skill) => (
-                  <span
-                    key={skill}
-                    className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-              <div className="flex items-center gap-3 mb-4">
-                <Briefcase size={24} className="text-purple-600" />
-                <h3 className="text-xl font-semibold text-gray-800">Backend</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {[
+                ],
+              },
+              {
+                title: 'Backend',
+                skills: [
                   'Node.js',
                   'Nest.js',
                   'PHP',
                   'Laravel',
                   'Express.js',
                   'REST APIs',
-                ].map((skill) => (
-                  <span
-                    key={skill}
-                    className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-              <div className="flex items-center gap-3 mb-4">
-                <Award size={24} className="text-green-600" />
-                <h3 className="text-xl font-semibold text-gray-800">
-                  Databases
-                </h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {['MongoDB', 'MySQL', 'PostgreSQL'].map((skill) => (
-                  <span
-                    key={skill}
-                    className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-              <div className="flex items-center gap-3 mb-4">
-                <Globe size={24} className="text-orange-600" />
-                <h3 className="text-xl font-semibold text-gray-800">
-                  Tools & Others
-                </h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {[
+                ],
+              },
+              {
+                title: 'Database & Tools',
+                skills: [
+                  'MongoDB',
+                  'MySQL',
+                  'PostgreSQL',
                   'AWS',
                   'Git/GitHub',
                   'React Native',
-                  'jQuery',
-                  'AJAX',
-                  'Adobe Photoshop',
-                ].map((skill) => (
-                  <span
-                    key={skill}
-                    className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-              <div className="flex items-center gap-3 mb-4">
-                <Code size={24} className="text-red-600" />
-                <h3 className="text-xl font-semibold text-gray-800">
-                  Languages
+                ],
+              },
+            ].map((category, index) => (
+              <div key={index} className="space-y-6">
+                <h3 className="text-2xl font-light text-gray-900 border-b border-gray-300 pb-3">
+                  {category.title}
                 </h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {['JavaScript', 'TypeScript', 'PHP', 'C', 'C++'].map(
-                  (skill) => (
-                    <span
+                <ul className="space-y-3">
+                  {category.skills.map((skill) => (
+                    <li
                       key={skill}
-                      className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm"
+                      className="text-gray-700 font-light flex items-center gap-3"
                     >
+                      <div className="w-1.5 h-1.5 bg-gray-900 rounded-full" />
                       {skill}
-                    </span>
-                  )
-                )}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
-              <div className="flex items-center gap-3 mb-4">
-                <Award size={24} className="text-indigo-600" />
-                <h3 className="text-xl font-semibold text-gray-800">
-                  Specializations
-                </h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {['MERN Stack', 'PERN Stack', 'Full Stack', 'SQA'].map(
-                  (skill) => (
-                    <span
-                      key={skill}
-                      className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm"
-                    >
-                      {skill}
-                    </span>
-                  )
-                )}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Experience Section */}
-      <section id="experience" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            Professional Experience
-          </h2>
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="relative pl-8 border-l-4 border-blue-600">
-              <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-600 rounded-full"></div>
-              <div className="bg-gray-50 p-6 rounded-lg hover:shadow-lg transition-shadow">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-3">
+      {/* Experience Section - Timeline Style */}
+      <section id="experience" className="py-32 bg-white">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+          <div className="mb-20">
+            <h2 className="text-5xl md:text-6xl font-light text-gray-900 mb-4 tracking-tight">
+              Experience
+            </h2>
+            <div className="w-16 h-px bg-gray-900" />
+          </div>
+          <div className="space-y-16">
+            {[
+              {
+                title: 'Next.js Developer',
+                company: 'KK IT Solutions Pvt LTD',
+                location: 'Multan, Pakistan',
+                period: 'Oct 2023 - Present',
+                description: [
+                  'Spearheaded migration of legacy PHP systems to modern Next.js architecture',
+                  'Led development of JanJapan Cars System using Next.js and Nest.js',
+                  'Developed AI-powered chatbot system integrated with Next.js',
+                  'Architected and deployed scalable REST APIs',
+                ],
+              },
+              {
+                title: 'Senior Laravel Developer',
+                company: 'KK IT Solutions Pvt LTD',
+                location: 'Multan, Pakistan',
+                period: 'Apr 2022 - Sep 2023',
+                description: [
+                  'Developed OrderTik platform (jalal.ordertik.com) with comprehensive order management',
+                  'Built driver management system with real-time location tracking',
+                  'Created responsive admin dashboards for fleet management',
+                  'Optimized database queries resulting in 40% faster load times',
+                ],
+              },
+              {
+                title: 'Software Developer',
+                company: 'KK IT Solutions Pvt LTD',
+                location: 'Multan, Pakistan',
+                period: 'Aug 2021 - Present',
+                description: [
+                  'Full-stack development using MERN and PERN stack',
+                  'Developed React Native mobile application (2-3 months)',
+                  'Collaborated with cross-functional teams',
+                  'Conducted code reviews and mentored junior developers',
+                ],
+              },
+              {
+                title: 'PHP Developer',
+                company: 'Pro Tech Giant (Pvt.) Ltd.',
+                location: 'Multan, Pakistan',
+                period: 'Mar 2021 - Jul 2021',
+                description: [
+                  'Developed custom PHP solutions and dynamic web applications',
+                  'Integrated MySQL databases with secure backend systems',
+                  'Implemented RESTful APIs for third-party integrations',
+                ],
+              },
+            ].map((exp, index) => (
+              <div key={index} className="border-l-2 border-gray-200 pl-8 relative">
+                <div className="absolute -left-2 top-0 w-4 h-4 bg-white border-2 border-gray-900 rounded-full" />
+                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
                   <div>
-                    <h3 className="text-2xl font-semibold text-gray-800">
-                      Next.js Developer
-                    </h3>
-                    <p className="text-blue-600 font-medium text-lg">
-                      KK IT Solutions Pvt LTD
-                    </p>
-                    <p className="text-gray-600 text-sm flex items-center gap-1 mt-1">
+                    <h3 className="text-2xl font-light text-gray-900 mb-2">{exp.title}</h3>
+                    <p className="text-lg text-gray-600 font-light">{exp.company}</p>
+                    <p className="text-sm text-gray-500 font-light flex items-center gap-1 mt-1">
                       <MapPin size={14} />
-                      Multan, Punjab, Pakistan
+                      {exp.location}
                     </p>
                   </div>
-                  <span className="text-gray-600 font-medium mt-2 md:mt-0">
-                    Oct 2023 - Present
+                  <span className="text-sm text-gray-500 font-light mt-2 md:mt-0">
+                    {exp.period}
                   </span>
                 </div>
-                <ul className="list-disc list-inside text-gray-700 space-y-2 text-sm">
-                  <li>
-                    Spearheaded migration of legacy PHP systems to modern
-                    Next.js architecture
-                  </li>
-                  <li>
-                    Led development of JanJapan Cars System using Next.js and
-                    Nest.js
-                  </li>
-                  <li>
-                    Developed AI-powered chatbot system integrated with Next.js
-                  </li>
-                  <li>Architected and deployed scalable REST APIs</li>
+                <ul className="space-y-2 mt-4">
+                  {exp.description.map((point, i) => (
+                    <li key={i} className="text-gray-700 font-light flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2 flex-shrink-0" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
-            </div>
-
-            <div className="relative pl-8 border-l-4 border-blue-600">
-              <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-600 rounded-full"></div>
-              <div className="bg-gray-50 p-6 rounded-lg hover:shadow-lg transition-shadow">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-3">
-                  <div>
-                    <h3 className="text-2xl font-semibold text-gray-800">
-                      Senior Laravel Developer
-                    </h3>
-                    <p className="text-blue-600 font-medium text-lg">
-                      KK IT Solutions Pvt LTD
-                    </p>
-                    <p className="text-gray-600 text-sm flex items-center gap-1 mt-1">
-                      <MapPin size={14} />
-                      Multan, Punjab, Pakistan
-                    </p>
-                  </div>
-                  <span className="text-gray-600 font-medium mt-2 md:mt-0">
-                    Apr 2022 - Sep 2023
-                  </span>
-                </div>
-                <ul className="list-disc list-inside text-gray-700 space-y-2 text-sm">
-                  <li>
-                    Developed OrderTik platform (
-                    <a
-                      href="https://jalal.ordertik.com/login"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
-                    >
-                      jalal.ordertik.com
-                    </a>
-                    ) with comprehensive order management
-                  </li>
-                  <li>
-                    Built driver management system with real-time location
-                    tracking
-                  </li>
-                  <li>
-                    Created responsive admin dashboards for fleet management
-                  </li>
-                  <li>
-                    Optimized database queries resulting in 40% faster load
-                    times
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="relative pl-8 border-l-4 border-blue-600">
-              <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-600 rounded-full"></div>
-              <div className="bg-gray-50 p-6 rounded-lg hover:shadow-lg transition-shadow">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-3">
-                  <div>
-                    <h3 className="text-2xl font-semibold text-gray-800">
-                      Software Developer
-                    </h3>
-                    <p className="text-blue-600 font-medium text-lg">
-                      KK IT Solutions Pvt LTD
-                    </p>
-                    <p className="text-gray-600 text-sm flex items-center gap-1 mt-1">
-                      <MapPin size={14} />
-                      Multan, Punjab, Pakistan
-                    </p>
-                  </div>
-                  <span className="text-gray-600 font-medium mt-2 md:mt-0">
-                    Aug 2021 - Present
-                  </span>
-                </div>
-                <ul className="list-disc list-inside text-gray-700 space-y-2 text-sm">
-                  <li>Full-stack development using MERN and PERN stack</li>
-                  <li>
-                    Developed React Native mobile application (2-3 months)
-                  </li>
-                  <li>Collaborated with cross-functional teams</li>
-                  <li>Conducted code reviews and mentored junior developers</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="relative pl-8 border-l-4 border-purple-600">
-              <div className="absolute -left-2 top-0 w-4 h-4 bg-purple-600 rounded-full"></div>
-              <div className="bg-gray-50 p-6 rounded-lg hover:shadow-lg transition-shadow">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-3">
-                  <div>
-                    <h3 className="text-2xl font-semibold text-gray-800">
-                      PHP Developer
-                    </h3>
-                    <p className="text-purple-600 font-medium text-lg">
-                      Pro Tech Giant (Pvt.) Ltd.
-                    </p>
-                    <p className="text-gray-600 text-sm flex items-center gap-1 mt-1">
-                      <MapPin size={14} />
-                      Multan, Punjab, Pakistan
-                    </p>
-                  </div>
-                  <span className="text-gray-600 font-medium mt-2 md:mt-0">
-                    Mar 2021 - Jul 2021
-                  </span>
-                </div>
-                <ul className="list-disc list-inside text-gray-700 space-y-2 text-sm">
-                  <li>
-                    Developed custom PHP solutions and dynamic web applications
-                  </li>
-                  <li>
-                    Integrated MySQL databases with secure backend systems
-                  </li>
-                  <li>Implemented RESTful APIs for third-party integrations</li>
-                </ul>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section
-        id="projects"
-        className="py-20 bg-gradient-to-br from-gray-50 to-blue-50"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            Key Projects
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Projects Section - Clean Grid */}
+      <section id="projects" className="py-32 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+          <div className="mb-20">
+            <h2 className="text-5xl md:text-6xl font-light text-gray-900 mb-4 tracking-tight">
+              Projects
+            </h2>
+            <div className="w-16 h-px bg-gray-900" />
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
             {[
               {
                 title: 'University Admission Portal',
@@ -582,11 +410,7 @@ export default function Resume() {
                 description:
                   'Enterprise-level ERP system with OBE compliance for academic institution.',
                 tech: 'Next.js, Nest.js, PostgreSQL',
-                features: [
-                  'OBE framework',
-                  'Attendance tracking',
-                  'Multi-role dashboards',
-                ],
+                features: ['OBE framework', 'Attendance tracking', 'Multi-role dashboards'],
               },
               {
                 title: 'JanJapan Cars System',
@@ -601,68 +425,45 @@ export default function Resume() {
               },
               {
                 title: 'Venbid - Service Platform',
-                description:
-                  'On-demand home services marketplace for UK client.',
+                description: 'On-demand home services marketplace for UK client.',
                 tech: 'React.js, Node.js, MongoDB',
-                features: [
-                  'Three-tier system',
-                  'Real-time booking',
-                  'Rating system',
-                ],
+                features: ['Three-tier system', 'Real-time booking', 'Rating system'],
               },
               {
                 title: 'Asan Umrah Committee',
-                description:
-                  'Digital platform for managing online committee operations.',
+                description: 'Digital platform for managing online committee operations.',
                 tech: 'Laravel, MySQL',
-                features: [
-                  'Member registration',
-                  'Payment tracking',
-                  'Financial reporting',
-                ],
+                features: ['Member registration', 'Payment tracking', 'Financial reporting'],
               },
               {
                 title: 'OrderTik Restaurant',
-                description:
-                  'Complete restaurant order management with driver tracking.',
+                description: 'Complete restaurant order management with driver tracking.',
                 tech: 'Laravel, MySQL, Google Maps',
-                features: [
-                  'Order processing',
-                  'GPS tracking',
-                  'Analytics dashboard',
-                ],
-              },
-              {
-                title: 'AI Chatbot System',
-                description:
-                  'Intelligent chatbot for automated customer support.',
-                tech: 'Next.js, Node.js, AI APIs',
-                features: [
-                  'NLP integration',
-                  'Contextual conversations',
-                  'Admin panel',
-                ],
+                features: ['Order processing', 'GPS tracking', 'Analytics dashboard'],
               },
             ].map((project, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all transform hover:-translate-y-2"
+                className="bg-white p-8 border border-gray-200 hover:border-gray-900 transition-all duration-300 group"
               >
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">
+                <h3 className="text-2xl font-light text-gray-900 mb-3 group-hover:text-gray-700">
                   {project.title}
                 </h3>
-                <p className="text-gray-600 text-sm mb-4">
+                <p className="text-gray-600 font-light mb-4 leading-relaxed">
                   {project.description}
                 </p>
                 <div className="mb-4">
-                  <p className="text-xs font-semibold text-gray-500 mb-2">
-                    TECH STACK:
+                  <p className="text-xs font-light text-gray-500 uppercase tracking-widest mb-2">
+                    Tech Stack
                   </p>
-                  <p className="text-sm text-blue-600">{project.tech}</p>
+                  <p className="text-sm text-gray-900 font-light">{project.tech}</p>
                 </div>
-                <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
+                <ul className="space-y-2">
                   {project.features.map((feature, i) => (
-                    <li key={i}>{feature}</li>
+                    <li key={i} className="text-sm text-gray-700 font-light flex items-center gap-2">
+                      <Star size={12} className="text-gray-400" />
+                      {feature}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -672,101 +473,103 @@ export default function Resume() {
       </section>
 
       {/* Education Section */}
-      <section id="education" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">
-            Education
-          </h2>
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-lg shadow-lg">
-              <div className="flex items-start gap-4">
-                <div className="bg-blue-600 p-4 rounded-lg">
-                  <GraduationCap size={32} className="text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-semibold text-gray-800 mb-2">
-                    Bachelor of Science in Computer Science (BSCS)
-                  </h3>
-                  <p className="text-blue-600 font-medium text-lg mb-2">
-                    Muhammad Nawaz Sharif University of Engineering &
-                    Technology, Multan
-                  </p>
-                  <p className="text-gray-600 mb-3">2021 - 2025</p>
-                  <p className="text-gray-700">
-                    Comprehensive computer science education covering software
-                    engineering, data structures, algorithms, database systems,
-                    and web technologies.
-                  </p>
-                </div>
-              </div>
+      <section id="education" className="py-32 bg-white">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+          <div className="mb-20">
+            <h2 className="text-5xl md:text-6xl font-light text-gray-900 mb-4 tracking-tight">
+              Education
+            </h2>
+            <div className="w-16 h-px bg-gray-900" />
+          </div>
+          <div className="max-w-3xl">
+            <div className="border-l-2 border-gray-200 pl-8 relative">
+              <div className="absolute -left-2 top-0 w-4 h-4 bg-white border-2 border-gray-900 rounded-full" />
+              <h3 className="text-2xl font-light text-gray-900 mb-2">
+                Bachelor of Science in Computer Science (BSCS)
+              </h3>
+              <p className="text-lg text-gray-600 font-light mb-2">
+                Muhammad Nawaz Sharif University of Engineering & Technology, Multan
+              </p>
+              <p className="text-sm text-gray-500 font-light mb-4">2021 - 2025</p>
+              <p className="text-gray-700 font-light leading-relaxed">
+                Comprehensive computer science education covering software engineering, data
+                structures, algorithms, database systems, and web technologies.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section
-        id="contact"
-        className="py-20 bg-gradient-to-br from-blue-600 to-purple-600 text-white"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-12">Get In Touch</h2>
-          <div className="max-w-3xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <a
-                href="mailto:itzhassanraza276@gmail.com"
-                className="bg-white/10 backdrop-blur-md p-6 rounded-lg hover:bg-white/20 transition-all flex items-center gap-4"
-              >
-                <Mail size={32} />
-                <div>
-                  <div className="font-semibold">Email</div>
-                  <div className="text-sm text-blue-100">
-                    itzhassanraza276@gmail.com
-                  </div>
-                </div>
-              </a>
-              <a
-                href="tel:+923297901828"
-                className="bg-white/10 backdrop-blur-md p-6 rounded-lg hover:bg-white/20 transition-all flex items-center gap-4"
-              >
-                <Phone size={32} />
-                <div>
-                  <div className="font-semibold">Phone</div>
-                  <div className="text-sm text-blue-100">+92 329 7901828</div>
-                </div>
-              </a>
-              <a
-                href="https://linkedin.com/in/hassan-raza-42280221b"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white/10 backdrop-blur-md p-6 rounded-lg hover:bg-white/20 transition-all flex items-center gap-4"
-              >
-                <Linkedin size={32} />
-                <div>
-                  <div className="font-semibold">LinkedIn</div>
-                  <div className="text-sm text-blue-100">
-                    linkedin.com/in/hassan-raza
-                  </div>
-                </div>
-              </a>
-              <div className="bg-white/10 backdrop-blur-md p-6 rounded-lg flex items-center gap-4">
-                <MapPin size={32} />
-                <div>
-                  <div className="font-semibold">Location</div>
-                  <div className="text-sm text-blue-100">
-                    Multan, Punjab, Pakistan
-                  </div>
-                </div>
-              </div>
+      {/* Contact Section - Minimal */}
+      <section id="contact" className="py-32 bg-gray-900 text-white">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+          <div className="mb-20">
+            <h2 className="text-5xl md:text-6xl font-light mb-4 tracking-tight">
+              Contact
+            </h2>
+            <div className="w-16 h-px bg-white" />
+          </div>
+          <div className="grid md:grid-cols-2 gap-12">
+            <div>
+              <p className="text-lg font-light text-gray-300 mb-8 leading-relaxed">
+                I'm always open to discussing new projects, creative ideas, or opportunities to be
+                part of your visions.
+              </p>
             </div>
-            <div className="text-center">
-              <p className="text-blue-100 mb-4">Also available on:</p>
-              <div className="flex justify-center gap-4">
+            <div className="space-y-6">
+              {[
+                {
+                  icon: Mail,
+                  label: 'Email',
+                  value: 'itzhassanraza276@gmail.com',
+                  href: 'mailto:itzhassanraza276@gmail.com',
+                },
+                {
+                  icon: Phone,
+                  label: 'Phone',
+                  value: '+92 329 7901828',
+                  href: 'tel:+923297901828',
+                },
+                {
+                  icon: MapPin,
+                  label: 'Location',
+                  value: 'Multan, Punjab, Pakistan',
+                  href: null,
+                },
+              ].map((contact, index) => {
+                const Component = contact.href ? 'a' : 'div';
+                return (
+                  <Component
+                    key={index}
+                    href={contact.href || undefined}
+                    className={`flex items-center gap-4 group ${
+                      contact.href ? 'hover:text-gray-300 transition-colors' : ''
+                    }`}
+                  >
+                    <contact.icon size={20} className="text-gray-400" />
+                    <div>
+                      <div className="text-xs font-light text-gray-400 uppercase tracking-widest mb-1">
+                        {contact.label}
+                      </div>
+                      <div className="text-base font-light">{contact.value}</div>
+                    </div>
+                  </Component>
+                );
+              })}
+              <div className="flex gap-4 pt-4">
+                <a
+                  href="https://linkedin.com/in/hassan-raza-42280221b"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <Linkedin size={24} />
+                </a>
                 <a
                   href="https://github.com/hassan-raza-111"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/10 backdrop-blur-md p-4 rounded-lg hover:bg-white/20 transition-all"
+                  className="text-gray-400 hover:text-white transition-colors"
                 >
                   <Github size={24} />
                 </a>
@@ -774,7 +577,7 @@ export default function Resume() {
                   href="https://github.com/hassan-raza123"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/10 backdrop-blur-md p-4 rounded-lg hover:bg-white/20 transition-all"
+                  className="text-gray-400 hover:text-white transition-colors"
                 >
                   <Github size={24} />
                 </a>
@@ -785,12 +588,13 @@ export default function Resume() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-400">
-            © 2025 Hassan Raza. Available for freelance projects and full-time
-            opportunities.
-          </p>
+      <footer className="bg-gray-900 border-t border-gray-800 py-12">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-gray-400 font-light text-sm">
+              © 2025 Hassan Raza. All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
 
@@ -805,19 +609,6 @@ export default function Resume() {
           section {
             page-break-inside: avoid;
           }
-        }
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 1s ease-out;
         }
       `}</style>
     </div>
