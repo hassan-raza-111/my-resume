@@ -68,11 +68,10 @@ export default function Resume() {
     <div className="min-h-screen bg-slate-900">
       {/* Navigation Bar - Clean Modern */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-slate-900/95 backdrop-blur-md shadow-lg border-b border-slate-700'
-            : 'bg-slate-900/80 backdrop-blur-sm'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+          ? 'bg-slate-900/95 backdrop-blur-md shadow-lg border-b border-slate-700'
+          : 'bg-slate-900/80 backdrop-blur-sm'
+          }`}
       >
         <div className="max-w-[1920px] mx-auto px-[60px]">
           <div className="flex justify-between items-center h-[80px]">
@@ -93,11 +92,10 @@ export default function Resume() {
                 <button
                   key={tab.id}
                   onClick={() => scrollToTab(tab.id)}
-                  className={`text-[14px] font-medium tracking-[0.5px] transition-colors ${
-                    activeTab === tab.id
-                      ? 'text-cyan-400'
-                      : 'text-gray-300 hover:text-white'
-                  }`}
+                  className={`text-[14px] font-medium tracking-[0.5px] transition-colors ${activeTab === tab.id
+                    ? 'text-cyan-400'
+                    : 'text-gray-300 hover:text-white'
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -124,9 +122,8 @@ export default function Resume() {
                 <button
                   key={tab.id}
                   onClick={() => scrollToTab(tab.id)}
-                  className={`block w-full text-left text-[14px] font-medium py-2 transition-colors ${
-                    activeTab === tab.id ? 'text-cyan-400' : 'text-gray-300 hover:text-white'
-                  }`}
+                  className={`block w-full text-left text-[14px] font-medium py-2 transition-colors ${activeTab === tab.id ? 'text-cyan-400' : 'text-gray-300 hover:text-white'
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -202,16 +199,10 @@ export default function Resume() {
             </div>
             <div className="space-y-[30px]">
               <p className="text-[20px] font-light text-gray-300 leading-[1.8]">
-                Results-driven Full Stack Developer with 4+ years of
-                professional experience in designing, developing, and deploying
-                scalable web applications that drive business growth.
+                Results-driven Full Stack Developer with 4+ years of professional experience in designing, developing, and deploying scalable web applications. Expert in modern JavaScript frameworks (React.js, Next.js, Node.js, Nest.js) and full MERN stack development.
               </p>
               <p className="text-[20px] font-light text-gray-300 leading-[1.8]">
-                Expert in modern JavaScript frameworks (React.js, Next.js,
-                Node.js, Nest.js) and full MERN/PERN stack development. Proven
-                track record of successfully delivering complex enterprise-level
-                projects including ERP systems, admission portals, e-commerce
-                platforms, and real-time management systems.
+                Proven track record of successfully delivering complex enterprise-level projects including ERP systems, admission portals, e-commerce platforms, and real-time management systems. Strong background in both frontend and backend development with expertise in database design, REST APIs, and cloud deployment.
               </p>
               <div className="pt-[40px] space-y-[20px]">
                 <div className="flex items-center gap-[16px]">
@@ -257,8 +248,10 @@ export default function Resume() {
                   { name: 'Next.js', level: 90 },
                   { name: 'TypeScript', level: 85 },
                   { name: 'JavaScript', level: 95 },
+                  { name: 'Redux.js', level: 85 },
+                  { name: 'React Query', level: 85 },
                   { name: 'Tailwind CSS', level: 90 },
-                  { name: 'HTML5/CSS3', level: 95 },
+                  { name: 'Bootstrap', level: 85 },
                 ],
               },
               {
@@ -270,19 +263,17 @@ export default function Resume() {
                   { name: 'Laravel/PHP', level: 85 },
                   { name: 'Express.js', level: 90 },
                   { name: 'REST APIs', level: 95 },
-                  { name: 'GraphQL', level: 75 },
                 ],
               },
               {
-                title: 'Database & DevOps',
+                title: 'Databases & Tools',
                 icon: Award,
                 skills: [
-                  { name: 'PostgreSQL', level: 85 },
                   { name: 'MongoDB', level: 90 },
                   { name: 'MySQL', level: 85 },
+                  { name: 'PostgreSQL', level: 85 },
                   { name: 'AWS', level: 80 },
                   { name: 'Git/GitHub', level: 95 },
-                  { name: 'Docker', level: 75 },
                 ],
               },
             ].map((category, index) => {
@@ -363,57 +354,65 @@ export default function Resume() {
               {
                 title: 'Next.js Developer',
                 company: 'KK IT Solutions Pvt LTD',
-                location: 'Multan, Pakistan',
-                period: 'Oct 2023 - Present',
-                highlights: ['Team Lead', 'Full-Stack', 'Migration Expert'],
+                location: 'Multan, Punjab, Pakistan (On-site)',
+                period: 'October 2023 - Present',
+                highlights: ['Next.js', 'Nest.js', 'Performance Optimization'],
                 description: [
-                  'Led migration of 3+ legacy PHP systems to modern Next.js, improving performance by 300%',
-                  'Architected and developed JanJapan Cars System serving 5000+ daily users',
-                  'Built AI-powered chatbot system reducing customer service queries by 60%',
-                  'Designed scalable REST APIs handling 10,000+ concurrent requests',
-                  'Mentored 4 junior developers and established coding standards',
+                  'Spearheaded migration of legacy PHP systems to modern Next.js architecture, improving performance by 60%',
+                  'Led development of JanJapan Cars System using Next.js and Nest.js, implementing inventory management and live auction features',
+                  'Developed AI-powered chatbot system integrated with Next.js for client engagement and automated customer support',
+                  'Architected and deployed scalable REST APIs with optimized database queries for high-traffic applications',
+                  'Implemented real-time features using WebSockets for live auction bidding and inventory updates',
                 ],
               },
               {
                 title: 'Senior Laravel Developer',
                 company: 'KK IT Solutions Pvt LTD',
-                location: 'Multan, Pakistan',
-                period: 'Apr 2022 - Sep 2023',
-                highlights: ['Senior Developer', 'System Architecture', 'Performance Optimization'],
+                location: 'Multan, Punjab, Pakistan (On-site)',
+                period: 'April 2022 - September 2023',
+                highlights: ['Laravel', 'MySQL', 'System Architecture'],
                 description: [
-                  'Developed OrderTik platform processing 2000+ daily orders with 99.9% uptime',
-                  'Built real-time GPS tracking system for 100+ drivers with live location updates',
-                  'Created comprehensive admin dashboard reducing manual reporting by 80%',
-                  'Optimized database queries achieving 40% faster load times and 50% reduced server costs',
-                  'Implemented automated testing reducing production bugs by 70%',
+                  'Developed OrderTik platform (jalal.ordertik.com) with comprehensive order management and driver tracking system',
+                  'Built driver management system with real-time location tracking and route optimization',
+                  'Created responsive admin dashboards for fleet management and analytics reporting',
+                  'Implemented secure authentication and role-based access control systems',
+                  'Optimized database queries resulting in 40% faster page load times',
                 ],
               },
               {
                 title: 'Software Developer',
                 company: 'KK IT Solutions Pvt LTD',
-                location: 'Multan, Pakistan',
-                period: 'Aug 2021 - Mar 2022',
-                highlights: ['Full-Stack', 'Mobile Development', 'Cross-functional'],
+                location: 'Multan, Punjab, Pakistan (On-site)',
+                period: 'August 2021 - Present',
+                highlights: ['MERN Stack', 'React Native', 'Full Stack'],
                 description: [
-                  'Developed 5+ full-stack applications using MERN/PERN stack technologies',
-                  'Built React Native mobile app deployed to 500+ users within 3 months',
-                  'Collaborated with 8-member cross-functional team using Agile methodologies',
-                  'Conducted 50+ code reviews and mentored 3 junior developers',
-                  'Implemented CI/CD pipelines reducing deployment time by 75%',
+                  'Full-stack development using MERN stack for diverse client projects',
+                  'Developed React Native mobile application with cross-platform compatibility',
+                  'Collaborated with cross-functional teams to deliver projects within tight deadlines',
+                  'Conducted code reviews and mentored junior developers on best practices',
                 ],
               },
               {
-                title: 'PHP Developer',
+                title: 'PHP Developer (Part-time)',
                 company: 'Pro Tech Giant (Pvt.) Ltd.',
-                location: 'Multan, Pakistan',
-                period: 'Mar 2021 - Jul 2021',
-                highlights: ['Backend Development', 'API Integration', 'Database Design'],
+                location: 'Multan, Punjab, Pakistan (On-site)',
+                period: 'March 2021 - July 2021',
+                highlights: ['PHP', 'MySQL', 'REST APIs'],
                 description: [
-                  'Developed 10+ custom PHP web applications with secure authentication',
-                  'Integrated MySQL databases with optimized queries for 1000+ concurrent users',
-                  'Built RESTful APIs enabling seamless third-party integrations',
-                  'Implemented payment gateways processing $50K+ monthly transactions',
-                  'Reduced application load time by 60% through performance optimization',
+                  'Developed custom PHP solutions and dynamic web applications',
+                  'Integrated MySQL databases with secure backend systems',
+                  'Implemented RESTful APIs for third-party integrations',
+                ],
+              },
+              {
+                title: 'Graphic Designer',
+                company: 'Pro Tech Giant (Pvt.) Ltd.',
+                location: 'Multan, Punjab, Pakistan (On-site)',
+                period: 'January 2021 - February 2021',
+                highlights: ['UI/UX', 'Adobe Photoshop', 'Graphic Design'],
+                description: [
+                  'Created visual designs and marketing materials using Adobe Photoshop',
+                  'Designed UI/UX mockups for web applications',
                 ],
               },
             ].map((exp, index) => (
@@ -488,99 +487,112 @@ export default function Resume() {
           <div className="grid md:grid-cols-2 gap-[40px]">
             {[
               {
-                title: 'University Admission Portal',
+                title: 'University Online Admission Portal',
                 description:
-                  'Comprehensive admission management system for MNSUET processing live admissions for 2025 batch.',
+                  'Developed comprehensive admission management system for Muhammad Nawaz Sharif University of Engineering & Technology, Multan currently processing live admissions for 2025 batch.',
                 tech: 'Next.js, Node.js, PostgreSQL',
                 features: [
-                  'Multi-application support',
-                  'Online fee payment integration',
-                  'Automated challan generation',
-                  'Real-time admission tracking',
+                  'Multi-application support with user and admin panels',
+                  'Integrated online fee payment with unique challan generation and bank verification',
+                  'Receipt upload and verification system',
+                  'Role-based dashboards for administrators and applicants',
                 ],
                 links: {
-                  github: 'https://github.com/hassan-raza-111/mnsuet-admission-portal',
+                  github: null,
                   demo: 'https://admissions.mnsuet.edu.pk',
                 },
               },
               {
-                title: 'Class Management System',
+                title: 'University Class Management System',
                 description:
-                  'Enterprise-level ERP system with OBE compliance for academic institution management.',
+                  'Enterprise-level ERP system for academic institution management with OBE compliance.',
                 tech: 'Next.js, Nest.js, PostgreSQL',
                 features: [
-                  'OBE framework implementation',
-                  'Automated attendance tracking',
-                  'Multi-role dashboards',
-                  'Performance analytics',
+                  'Implemented OBE (Outcome-Based Education) framework',
+                  'Real-time attendance tracking and class scheduling system',
+                  'Multi-role architecture: Super Admin, Department Admin, Teacher, and Student dashboards',
+                  'Comprehensive reporting and analytics modules',
                 ],
                 links: {
-                  github: 'https://github.com/hassan-raza-111/class-management-erp',
+                  github: null,
                   demo: null,
                 },
               },
               {
                 title: 'JanJapan Cars System',
                 description:
-                  'Complete migration from PHP to Next.js/Nest.js for automotive marketplace with live auctions.',
+                  'Complete system migration from PHP to modern Next.js/Nest.js architecture for automotive marketplace.',
                 tech: 'Next.js, Nest.js, MongoDB',
                 features: [
-                  'Advanced inventory management',
-                  'Real-time auction system',
-                  '3x performance improvement',
-                  'Mobile-responsive design',
+                  'Full-featured inventory management system',
+                  'Real-time auction system with live bidding',
+                  'Advanced search and filtering capabilities',
+                  'Performance optimization resulting in 3x faster load times',
                 ],
                 links: {
-                  github: 'https://github.com/hassan-raza-111/janjapan-cars',
+                  github: null,
                   demo: 'https://janjapan.com',
                 },
               },
               {
-                title: 'Venbid - Service Platform',
+                title: 'Venbid - Service Provider Platform',
                 description:
-                  'On-demand home services marketplace connecting customers with service providers.',
+                  'On-demand home services marketplace connecting customers with verified service providers (UK Client).',
                 tech: 'React.js, Node.js, MongoDB',
                 features: [
-                  'Three-tier booking system',
-                  'Real-time notifications',
-                  'Rating and review system',
-                  'Secure payment processing',
+                  'Three-tier system: Customer, Vendor, and Admin portals',
+                  'Service categories: Furniture repair, plumbing, electrical, and more',
+                  'Real-time booking and scheduling system',
+                  'Rating and review management',
                 ],
                 links: {
-                  github: 'https://github.com/hassan-raza-111/venbid-platform',
+                  github: null,
                   demo: null,
                 },
               },
               {
                 title: 'Asan Umrah Committee',
                 description:
-                  'Digital platform for managing online committee operations and member services.',
+                  'Digital platform for managing online committee operations and member contributions.',
                 tech: 'Laravel, MySQL',
                 features: [
-                  'Secure member registration',
-                  'Online payment tracking',
-                  'Financial reporting dashboard',
-                  'Document management',
+                  'Member registration and payment tracking',
+                  'Automated installment calculations',
+                  'Financial reporting and transparency features',
                 ],
                 links: {
-                  github: 'https://github.com/hassan-raza-111/asan-umrah-committee',
+                  github: null,
                   demo: null,
                 },
               },
               {
-                title: 'OrderTik Restaurant',
+                title: 'OrderTik - Restaurant Management',
                 description:
-                  'Complete restaurant order management system with real-time driver tracking.',
+                  'Complete restaurant order management system with driver tracking capabilities.',
                 tech: 'Laravel, MySQL, Google Maps API',
                 features: [
-                  'Real-time order processing',
-                  'GPS driver tracking',
-                  'Advanced analytics dashboard',
-                  'Multi-restaurant support',
+                  'Real-time order processing and kitchen management',
+                  'Driver assignment and live GPS tracking',
+                  'Admin dashboard with analytics and reporting',
                 ],
                 links: {
-                  github: 'https://github.com/hassan-raza-111/ordertik-restaurant',
+                  github: null,
                   demo: 'https://jalal.ordertik.com',
+                },
+              },
+              {
+                title: 'AI Chatbot System',
+                description:
+                  'Intelligent chatbot implementation for automated customer support and engagement.',
+                tech: 'Next.js, Node.js, AI APIs',
+                features: [
+                  'Natural language processing integration',
+                  'Contextual conversation management',
+                  'Admin panel for training and analytics',
+                ],
+                links: {
+                  github: null,
+                  demo: null,
                 },
               },
             ].map((project, index) => (
@@ -976,9 +988,8 @@ export default function Resume() {
                   <Component
                     key={index}
                     href={contact.href || undefined}
-                    className={`flex items-start gap-[24px] group p-[30px] bg-[#222] hover:bg-[#333] transition-colors ${
-                      contact.href ? 'cursor-pointer' : ''
-                    }`}
+                    className={`flex items-start gap-[24px] group p-[30px] bg-[#222] hover:bg-[#333] transition-colors ${contact.href ? 'cursor-pointer' : ''
+                      }`}
                   >
                     <contact.icon size={24} className="text-[#666] mt-[4px] group-hover:text-white transition-colors" />
                     <div className="flex-1">
@@ -1030,6 +1041,56 @@ export default function Resume() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Languages Section */}
+      <div className="py-[120px] bg-slate-800">
+        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
+          <div className="mb-[100px]">
+            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
+              Languages
+            </h2>
+            <div className="w-[80px] h-[2px] bg-cyan-400" />
+          </div>
+          <div className="grid md:grid-cols-2 gap-[40px]">
+            {[
+              { language: 'English', proficiency: 'Professional Working Proficiency' },
+              { language: 'Urdu', proficiency: 'Native Proficiency' },
+            ].map((lang, index) => (
+              <div key={index} className="bg-slate-900 p-[40px] border border-slate-700 rounded-lg">
+                <h3 className="text-[32px] font-bold text-white mb-[10px]">{lang.language}</h3>
+                <p className="text-cyan-400 font-light text-[18px]">{lang.proficiency}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Hobbies & Interests Section */}
+      <div className="py-[120px] bg-slate-900">
+        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
+          <div className="mb-[100px]">
+            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
+              Hobbies & Interests
+            </h2>
+            <div className="w-[80px] h-[2px] bg-cyan-400" />
+          </div>
+          <div className="flex flex-wrap gap-[20px]">
+            {[
+              'Learning New Technologies',
+              'Hardware Repair',
+              'Movies',
+              'Music Listening',
+            ].map((hobby, index) => (
+              <span
+                key={index}
+                className="bg-slate-800 border border-slate-600 text-gray-300 px-[30px] py-[15px] text-[18px] font-light hover:border-cyan-400 hover:text-cyan-400 transition-colors"
+              >
+                {hobby}
+              </span>
+            ))}
           </div>
         </div>
       </div>
