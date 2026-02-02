@@ -19,6 +19,7 @@ import {
   ChevronDown,
   ArrowRight,
 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Resume() {
   const [activeTab, setActiveTab] = useState('home');
@@ -145,10 +146,12 @@ export default function Resume() {
           <div className="mb-12 relative inline-block">
             <div className="absolute -inset-1 bg-gradient-to-r from-accent-primary to-accent-secondary rounded-full blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
             <div className="relative w-32 h-32 md:w-44 md:h-44 rounded-full overflow-hidden border-4 border-white/10 shadow-2xl">
-              <img
-                src="/WhatsApp Image 2026-01-17 at 01.33.33.jpeg"
+              <Image
+                src="/profile.jpg"
                 alt="Hassan Raza"
-                className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-500"
+                fill
+                className="object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-500"
+                priority
               />
             </div>
             <div className="absolute -bottom-2 -right-2 w-8 h-8 md:w-12 md:h-12 bg-background border-2 border-white/10 rounded-2xl flex items-center justify-center text-accent-primary shadow-xl">
