@@ -65,23 +65,25 @@ export default function Resume() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      {/* Navigation Bar - Clean Modern */}
+    <div className="min-h-screen bg-background selection:bg-accent-primary/30">
+      {/* Navigation Bar - Premium Glass */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? 'bg-slate-900/95 backdrop-blur-md shadow-lg border-b border-slate-700'
-          : 'bg-slate-900/80 backdrop-blur-sm'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+          ? 'glass py-4 shadow-2xl'
+          : 'bg-transparent py-6'
           }`}
       >
-        <div className="max-w-[1920px] mx-auto px-[60px]">
-          <div className="flex justify-between items-center h-[80px]">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="flex justify-between items-center">
             <div
-              className="text-[28px] font-bold text-cyan-400 cursor-pointer hover:text-cyan-300 transition-colors"
+              className="text-2xl font-display font-bold text-white cursor-pointer group flex items-center gap-2"
               onClick={() => scrollToTab('home')}
             >
-              HR
+              <span className="w-10 h-10 rounded-xl bg-accent-primary flex items-center justify-center text-white group-hover:rotate-12 transition-transform duration-300">HR</span>
+              <span className="hidden sm:block tracking-tight">Hassan Raza</span>
             </div>
-            <div className="hidden md:flex items-center space-x-[40px]">
+
+            <div className="hidden md:flex items-center bg-white/5 backdrop-blur-md rounded-full px-2 py-1 border border-white/10">
               {[
                 { id: 'home', label: 'Home' },
                 { id: 'about', label: 'About' },
@@ -92,40 +94,37 @@ export default function Resume() {
                 <button
                   key={tab.id}
                   onClick={() => scrollToTab(tab.id)}
-                  className={`text-[14px] font-medium tracking-[0.5px] transition-colors ${activeTab === tab.id
-                    ? 'text-cyan-400'
-                    : 'text-gray-300 hover:text-white'
+                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${activeTab === tab.id
+                    ? 'bg-accent-primary text-white shadow-lg shadow-accent-primary/25'
+                    : 'text-gray-400 hover:text-white'
                     }`}
                 >
                   {tab.label}
                 </button>
               ))}
             </div>
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-white hover:text-cyan-400 transition-colors"
+              className="md:hidden p-2 rounded-lg bg-white/5 border border-white/10 text-white"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-slate-800 border-t border-slate-700">
-            <div className="px-[60px] py-6 space-y-4">
-              {[
-                { id: 'home', label: 'Home' },
-                { id: 'about', label: 'About' },
-                { id: 'experience', label: 'Experience' },
-                { id: 'projects', label: 'Projects' },
-                { id: 'contact', label: 'Contact' },
-              ].map((tab) => (
+          <div className="md:hidden glass absolute top-full left-0 right-0 border-t border-white/10 animate-in fade-in slide-in-from-top-4">
+            <div className="p-6 space-y-4">
+              {['home', 'about', 'experience', 'projects', 'contact'].map((id) => (
                 <button
-                  key={tab.id}
-                  onClick={() => scrollToTab(tab.id)}
-                  className={`block w-full text-left text-[14px] font-medium py-2 transition-colors ${activeTab === tab.id ? 'text-cyan-400' : 'text-gray-300 hover:text-white'
+                  key={id}
+                  onClick={() => scrollToTab(id)}
+                  className={`block w-full text-left px-4 py-3 rounded-xl transition-colors ${activeTab === id ? 'bg-accent-primary text-white' : 'text-gray-400'
                     }`}
                 >
-                  {tab.label}
+                  {id.charAt(0).toUpperCase() + id.slice(1)}
                 </button>
               ))}
             </div>
@@ -133,991 +132,441 @@ export default function Resume() {
         )}
       </nav>
 
-      {/* Home Page/Tab - Clean Hero */}
-      <div
+      {/* Hero Section - Immersive Mesh */}
+      <section
         id="home"
         ref={setSectionRef('home')}
-        className="min-h-screen flex items-center justify-center relative bg-slate-900"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900"></div>
+        <div className="mesh-bg opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
 
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full text-center relative z-10">
-          <div className="space-y-[40px]">
-            <h1 className="text-[120px] md:text-[140px] font-bold leading-[1.1] tracking-[-2px] text-white">
-              <span className="text-cyan-400">Hassan</span>
-              <br />
-              <span className="text-gray-300 font-light">Raza</span>
-            </h1>
-            <div className="w-[80px] h-[2px] bg-cyan-400 mx-auto" />
-            <p className="text-[32px] md:text-[40px] font-light text-gray-300 mt-[60px] tracking-[-0.5px]">
-              Full Stack Developer
-            </p>
-            <p className="text-[18px] md:text-[20px] font-light text-gray-400 max-w-[600px] mx-auto mt-[30px] leading-relaxed">
-              Crafting digital experiences with modern technologies and turning ideas into reality
-            </p>
-            <div className="flex flex-wrap justify-center gap-[20px] mt-[80px]">
-              <a
-                href="mailto:itzhassanraza276@gmail.com"
-                className="inline-flex items-center gap-[12px] bg-cyan-500 hover:bg-cyan-600 text-white px-[40px] py-[16px] transition-colors duration-300 text-[14px] font-medium tracking-[1px] uppercase shadow-lg"
-              >
-                Get In Touch
-                <ArrowRight size={18} />
-              </a>
-              <button
-                onClick={generatePDF}
-                className="inline-flex items-center gap-[12px] border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-slate-900 px-[40px] py-[16px] transition-all duration-300 text-[14px] font-medium tracking-[1px] uppercase"
-              >
+        <div className="relative z-10 max-w-5xl mx-auto px-6 pt-20 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-primary/10 border border-accent-primary/20 mb-8 animate-bounce-subtle">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-primary"></span>
+            </span>
+            <span className="text-xs font-medium text-accent-primary tracking-wider uppercase">Open for new opportunities</span>
+          </div>
+
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-bold tracking-tight mb-8">
+            <span className="block text-white opacity-90">Building the</span>
+            <span className="text-gradient">Future Web</span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed font-sans">
+            Senior Full Stack Developer specializing in crafting high-performance,
+            scalable web applications with <span className="text-white font-medium">Next.js, Node.js, and Modern UI.</span>
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <a
+              href="mailto:itzhassanraza276@gmail.com"
+              className="group relative px-8 py-4 bg-white text-background rounded-2xl font-bold transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-xl shadow-white/10"
+            >
+              <span className="flex items-center gap-2">
+                Work With Me
+                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+              </span>
+            </a>
+
+            <button
+              onClick={generatePDF}
+              className="group px-8 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-bold backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-white/20"
+            >
+              <span className="flex items-center gap-2">
                 <Download size={18} />
                 Download CV
-              </button>
-            </div>
-            <div className="flex justify-center mt-[100px]">
-              <button
-                onClick={() => scrollToTab('about')}
-                className="text-gray-400 hover:text-cyan-400 transition-colors animate-bounce"
-              >
-                <ChevronDown size={40} />
-              </button>
-            </div>
+              </span>
+            </button>
+          </div>
+
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer flex flex-col items-center gap-2 opacity-50 hover:opacity-100 transition-opacity" onClick={() => scrollToTab('about')}>
+            <span className="text-[10px] uppercase tracking-widest font-bold">Scroll to Explore</span>
+            <ChevronDown size={20} />
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* About Page/Tab */}
-      <div
+      {/* About Section */}
+      <section
         id="about"
         ref={setSectionRef('about')}
-        className="min-h-screen flex items-center py-[120px] bg-slate-800"
+        className="py-32 relative overflow-hidden"
       >
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
-          <div className="grid md:grid-cols-2 gap-[120px] items-center">
-            <div>
-              <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[60px] tracking-[-2px]">
-                About
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-gradient-to-r from-accent-primary to-accent-secondary opacity-20 blur-2xl group-hover:opacity-30 transition-opacity" />
+              <h2 className="text-5xl md:text-7xl font-display font-bold mb-8 relative">
+                <span className="text-white">A Bit</span><br />
+                <span className="text-gradient">About Me</span>
               </h2>
-              <div className="w-[80px] h-[2px] bg-cyan-400 mb-[60px]" />
+              <div className="w-20 h-1 bg-accent-primary rounded-full mb-8" />
             </div>
-            <div className="space-y-[30px]">
-              <p className="text-[20px] font-light text-gray-300 leading-[1.8]">
-                Results-driven Full Stack Developer with 4+ years of professional experience in designing, developing, and deploying scalable web applications. Expert in modern JavaScript frameworks (React.js, Next.js, Node.js, Nest.js) and full MERN stack development.
+
+            <div className="space-y-8">
+              <p className="text-xl font-light text-gray-300 leading-relaxed font-sans">
+                Results-driven Full Stack Developer with <span className="text-white font-medium">4+ years of professional experience</span> in designing, developing, and deploying scalable web applications.
               </p>
-              <p className="text-[20px] font-light text-gray-300 leading-[1.8]">
-                Proven track record of successfully delivering complex enterprise-level projects including ERP systems, admission portals, e-commerce platforms, and real-time management systems. Strong background in both frontend and backend development with expertise in database design, REST APIs, and cloud deployment.
-              </p>
-              <div className="pt-[40px] space-y-[20px]">
-                <div className="flex items-center gap-[16px]">
-                  <div className="w-[6px] h-[6px] bg-cyan-400 rounded-full" />
-                  <span className="text-gray-300 font-light text-[18px]">
-                    4+ Years Experience
-                  </span>
-                </div>
-                <div className="flex items-center gap-[16px]">
-                  <div className="w-[6px] h-[6px] bg-cyan-400 rounded-full" />
-                  <span className="text-gray-300 font-light text-[18px]">
-                    20+ Projects Completed
-                  </span>
-                </div>
-                <div className="flex items-center gap-[16px]">
-                  <div className="w-[6px] h-[6px] bg-cyan-400 rounded-full" />
-                  <span className="text-gray-300 font-light text-[18px]">
-                    MERN & PERN Stack Specialist
-                  </span>
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8">
+                {[
+                  { label: 'Experience', value: '4+ Years', icon: Briefcase },
+                  { label: 'Projects', value: '20+ Delivered', icon: Code },
+                  { label: 'Specialty', value: 'MERN Stack', icon: Award },
+                  { label: 'Location', value: 'Remote / On-site', icon: MapPin },
+                ].map((item, i) => (
+                  <div key={i} className="glass p-6 rounded-2xl flex items-center gap-4 hover:border-accent-primary/30 transition-colors">
+                    <div className="p-3 rounded-xl bg-accent-primary/10 text-accent-primary">
+                      <item.icon size={24} />
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 uppercase tracking-widest font-bold mb-1">{item.label}</div>
+                      <div className="text-white font-medium">{item.value}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Skills Section */}
-      <div className="min-h-screen flex items-center py-[120px] bg-slate-900">
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
-          <div className="text-center mb-[100px]">
-            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
-              Skills & Expertise
-            </h2>
-            <div className="w-[80px] h-[2px] bg-cyan-400 mx-auto" />
+      <section className="py-32 bg-white/5 relative">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-display font-bold text-gradient mb-6">Technical Mastery</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">Weapon of choice for building modern, scalable applications</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-[80px]">
+
+          <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                title: 'Frontend Development',
+                title: 'Frontend',
                 icon: Code,
-                skills: [
-                  { name: 'React.js', level: 95 },
-                  { name: 'Next.js', level: 90 },
-                  { name: 'TypeScript', level: 85 },
-                  { name: 'JavaScript', level: 95 },
-                  { name: 'Redux.js', level: 85 },
-                  { name: 'React Query', level: 85 },
-                  { name: 'Tailwind CSS', level: 90 },
-                  { name: 'Bootstrap', level: 85 },
-                ],
+                color: 'from-blue-500 to-cyan-400',
+                skills: ['React.js', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Redux', 'React Query'],
               },
               {
-                title: 'Backend Development',
+                title: 'Backend',
                 icon: Briefcase,
-                skills: [
-                  { name: 'Node.js', level: 90 },
-                  { name: 'Nest.js', level: 85 },
-                  { name: 'Laravel/PHP', level: 85 },
-                  { name: 'Express.js', level: 90 },
-                  { name: 'REST APIs', level: 95 },
-                ],
+                color: 'from-indigo-500 to-violet-500',
+                skills: ['Node.js', 'Nest.js', 'Laravel/PHP', 'Express.js', 'REST APIs', 'PostgreSQL'],
               },
               {
-                title: 'Databases & Tools',
+                title: 'Infrastructure',
                 icon: Award,
-                skills: [
-                  { name: 'MongoDB', level: 90 },
-                  { name: 'MySQL', level: 85 },
-                  { name: 'PostgreSQL', level: 85 },
-                  { name: 'AWS', level: 80 },
-                  { name: 'Git/GitHub', level: 95 },
-                ],
+                color: 'from-fuchsia-500 to-pink-500',
+                skills: ['AWS', 'MongoDB', 'MySQL', 'Git/GitHub', 'Docker', 'Vercel'],
               },
-            ].map((category, index) => {
-              const IconComponent = category.icon;
-              return (
-                <div key={index} className="space-y-[30px] bg-slate-800 p-[40px] rounded-lg border border-slate-700">
-                  <div className="flex items-center gap-[16px] border-b border-slate-600 pb-[20px]">
-                    <div className="p-3 rounded-lg bg-cyan-500">
-                      <IconComponent size={28} className="text-white" />
-                    </div>
-                    <h3 className="text-[28px] font-bold text-white">
-                      {category.title}
-                    </h3>
-                  </div>
-                  <div className="space-y-[20px]">
-                    {category.skills.map((skill) => (
-                      <div key={skill.name} className="space-y-[8px]">
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-300 font-light text-[16px]">
-                            {skill.name}
-                          </span>
-                          <span className="text-gray-400 font-light text-[14px]">
-                            {skill.level}%
-                          </span>
-                        </div>
-                        <div className="w-full bg-slate-700 h-[6px] rounded-full overflow-hidden">
-                          <div
-                            className="bg-cyan-500 h-[6px] rounded-full transition-all duration-1000"
-                            style={{ width: `${skill.level}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+            ].map((category, index) => (
+              <div key={index} className="glass-card p-10 rounded-3xl h-full flex flex-col">
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${category.color} flex items-center justify-center text-white mb-8 shadow-lg`}>
+                  <category.icon size={28} />
                 </div>
-              );
-            })}
-          </div>
-          <div className="mt-[100px] text-center">
-            <div className="inline-flex flex-wrap justify-center gap-[20px] max-w-[1000px]">
-              {[
-                'Agile/Scrum',
-                'Test-Driven Development',
-                'CI/CD',
-                'Microservices',
-                'System Design',
-                'Code Review',
-                'Team Leadership',
-                'Problem Solving',
-              ].map((skill) => (
-                <span
-                  key={skill}
-                  className="bg-slate-800 border border-slate-600 text-gray-300 px-[20px] py-[10px] text-[14px] font-light hover:border-cyan-400 hover:text-cyan-400 transition-colors cursor-pointer"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
+                <h3 className="text-2xl font-display font-bold text-white mb-6 uppercase tracking-wider">{category.title}</h3>
+                <div className="flex flex-wrap gap-3 mt-auto">
+                  {category.skills.map((skill) => (
+                    <span key={skill} className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-300 text-sm hover:border-accent-primary/50 hover:bg-white/10 transition-all">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Experience Page/Tab */}
-      <div
+      {/* Experience Section */}
+      <section
         id="experience"
         ref={setSectionRef('experience')}
-        className="min-h-screen flex items-center py-[120px] bg-slate-800"
+        className="py-32 relative bg-background"
       >
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
-          <div className="mb-[100px]">
-            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
-              Experience
-            </h2>
-            <div className="w-[80px] h-[2px] bg-cyan-400" />
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
+            <div>
+              <h2 className="text-5xl md:text-7xl font-display font-bold text-white mb-6">Career <span className="text-gradient">Journey</span></h2>
+              <p className="text-gray-400 font-sans max-w-xl">Professional experience and key contributions in fast-paced tech environments.</p>
+            </div>
+            <div className="text-accent-primary font-display font-bold text-8xl opacity-10 hidden lg:block select-none">EXPERIENCE</div>
           </div>
-          <div className="space-y-[80px]">
+
+          <div className="space-y-12">
             {[
               {
                 title: 'Next.js Developer',
                 company: 'KK IT Solutions Pvt LTD',
-                location: 'Multan, Punjab, Pakistan (On-site)',
-                period: 'October 2023 - Present',
-                highlights: ['Next.js', 'Nest.js', 'Performance Optimization'],
-                description: [
-                  'Spearheaded migration of legacy PHP systems to modern Next.js architecture, improving performance by 60%',
-                  'Led development of JanJapan Cars System using Next.js and Nest.js, implementing inventory management and live auction features',
-                  'Developed AI-powered chatbot system integrated with Next.js for client engagement and automated customer support',
-                  'Architected and deployed scalable REST APIs with optimized database queries for high-traffic applications',
-                  'Implemented real-time features using WebSockets for live auction bidding and inventory updates',
-                ],
+                period: '2023 - Present',
+                tags: ['Team Lead', 'Architecture'],
+                description: 'Spearheaded migration of legacy systems to Next.js, improving performance by 60% and leading full-cycle development of automotive platforms.',
               },
               {
                 title: 'Senior Laravel Developer',
                 company: 'KK IT Solutions Pvt LTD',
-                location: 'Multan, Punjab, Pakistan (On-site)',
-                period: 'April 2022 - September 2023',
-                highlights: ['Laravel', 'MySQL', 'System Architecture'],
-                description: [
-                  'Developed OrderTik platform (jalal.ordertik.com) with comprehensive order management and driver tracking system',
-                  'Built driver management system with real-time location tracking and route optimization',
-                  'Created responsive admin dashboards for fleet management and analytics reporting',
-                  'Implemented secure authentication and role-based access control systems',
-                  'Optimized database queries resulting in 40% faster page load times',
-                ],
+                period: '2022 - 2023',
+                tags: ['Logistics', 'Real-time'],
+                description: 'Architected OrderTik platform with GPS driver tracking and optimized fleet management dashboards.',
               },
               {
                 title: 'Software Developer',
                 company: 'KK IT Solutions Pvt LTD',
-                location: 'Multan, Punjab, Pakistan (On-site)',
-                period: 'August 2021 - Present',
-                highlights: ['MERN Stack', 'React Native', 'Full Stack'],
-                description: [
-                  'Full-stack development using MERN stack for diverse client projects',
-                  'Developed React Native mobile application with cross-platform compatibility',
-                  'Collaborated with cross-functional teams to deliver projects within tight deadlines',
-                  'Conducted code reviews and mentored junior developers on best practices',
-                ],
-              },
-              {
-                title: 'PHP Developer (Part-time)',
-                company: 'Pro Tech Giant (Pvt.) Ltd.',
-                location: 'Multan, Punjab, Pakistan (On-site)',
-                period: 'March 2021 - July 2021',
-                highlights: ['PHP', 'MySQL', 'REST APIs'],
-                description: [
-                  'Developed custom PHP solutions and dynamic web applications',
-                  'Integrated MySQL databases with secure backend systems',
-                  'Implemented RESTful APIs for third-party integrations',
-                ],
-              },
-              {
-                title: 'Graphic Designer',
-                company: 'Pro Tech Giant (Pvt.) Ltd.',
-                location: 'Multan, Punjab, Pakistan (On-site)',
-                period: 'January 2021 - February 2021',
-                highlights: ['UI/UX', 'Adobe Photoshop', 'Graphic Design'],
-                description: [
-                  'Created visual designs and marketing materials using Adobe Photoshop',
-                  'Designed UI/UX mockups for web applications',
-                ],
+                period: '2021 - Present',
+                tags: ['Full Stack', 'Mobile'],
+                description: 'Delivered cross-platform solutions using MERN stack and React Native for diverse enterprise clients.',
               },
             ].map((exp, index) => (
-              <div
-                key={index}
-                className="border-l-2 border-cyan-400 pl-[60px] relative"
-              >
-                <div className="absolute -left-[7px] top-0 w-[14px] h-[14px] bg-cyan-400 rounded-full" />
-                <div className="bg-slate-800 p-[40px] rounded-lg border border-slate-700">
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-[30px]">
-                    <div className="flex-1">
-                      <div className="flex flex-col md:flex-row md:items-start md:gap-[20px] mb-[12px]">
-                        <h3 className="text-[36px] font-bold text-white">
-                          {exp.title}
-                        </h3>
-                        {exp.highlights && (
-                          <div className="flex flex-wrap gap-[8px] mt-[8px] md:mt-0">
-                            {exp.highlights.map((highlight, i) => (
-                              <span
-                                key={i}
-                                className="bg-cyan-500/20 text-cyan-400 px-[12px] py-[4px] text-[12px] font-medium uppercase tracking-[1px] border border-cyan-400/30"
-                              >
-                                {highlight}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      <p className="text-[24px] text-gray-300 font-light mb-[8px]">
-                        {exp.company}
-                      </p>
-                      <p className="text-[16px] text-gray-400 font-light flex items-center gap-[8px]">
-                        <MapPin size={16} className="text-cyan-400" />
-                        {exp.location}
-                      </p>
-                    </div>
-                    <span className="text-[16px] text-gray-400 font-light mt-[20px] md:mt-0 md:text-right bg-slate-700 px-3 py-1 rounded">
-                      {exp.period}
-                    </span>
-                  </div>
-                  <ul className="space-y-[12px] mt-[30px]">
-                    {exp.description.map((point, i) => (
-                      <li
-                        key={i}
-                        className="text-gray-300 font-light text-[18px] flex items-start gap-[16px]"
-                      >
-                        <div className="w-[6px] h-[6px] bg-cyan-400 rounded-full mt-[8px] flex-shrink-0" />
-                        <span>{point}</span>
-                      </li>
+              <div key={index} className="glass-card group p-8 md:p-12 rounded-[2rem] flex flex-col md:flex-row gap-10 items-start">
+                <div className="md:w-1/3">
+                  <div className="text-accent-primary font-bold tracking-widest text-sm mb-4 bg-accent-primary/5 inline-block px-4 py-1 rounded-full">{exp.period}</div>
+                  <h3 className="text-3xl font-display font-bold text-white mb-2">{exp.title}</h3>
+                  <p className="text-gray-400 font-medium mb-6">{exp.company}</p>
+                  <div className="flex gap-2">
+                    {exp.tags.map(tag => (
+                      <span key={tag} className="text-[10px] font-bold uppercase tracking-tighter text-gray-500 border border-white/5 px-3 py-1 rounded-lg">{tag}</span>
                     ))}
-                  </ul>
+                  </div>
+                </div>
+                <div className="md:w-2/3 border-l border-white/5 md:pl-10">
+                  <p className="text-gray-300 text-lg leading-relaxed font-sans mb-8">{exp.description}</p>
+                  <div className="w-12 h-1 bg-white/10 rounded-full group-hover:w-24 group-hover:bg-accent-primary transition-all duration-500" />
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Projects Page/Tab */}
-      <div
+      {/* Projects Section */}
+      <section
         id="projects"
         ref={setSectionRef('projects')}
-        className="min-h-screen flex items-center py-[120px] bg-slate-900"
+        className="py-32 relative overflow-hidden bg-white/5"
       >
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
-          <div className="mb-[100px] text-center">
-            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
-              Projects
-            </h2>
-            <div className="w-[80px] h-[2px] bg-cyan-400 mx-auto" />
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="text-center mb-24">
+            <h2 className="text-5xl md:text-7xl font-display font-bold text-white mb-6">Featured <span className="text-gradient">Creations</span></h2>
+            <p className="text-gray-400 max-w-2xl mx-auto font-sans">A selection of high-impact systems I've built from the ground up.</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-[40px]">
+
+          <div className="grid md:grid-cols-2 gap-8">
             {[
               {
-                title: 'University Online Admission Portal',
-                description:
-                  'Developed comprehensive admission management system for Muhammad Nawaz Sharif University of Engineering & Technology, Multan currently processing live admissions for 2025 batch.',
-                tech: 'Next.js, Node.js, PostgreSQL',
-                features: [
-                  'Multi-application support with user and admin panels',
-                  'Integrated online fee payment with unique challan generation and bank verification',
-                  'Receipt upload and verification system',
-                  'Role-based dashboards for administrators and applicants',
-                ],
-                links: {
-                  github: null,
-                  demo: 'https://admissions.mnsuet.edu.pk',
-                },
-              },
-              {
-                title: 'University Class Management System',
-                description:
-                  'Enterprise-level ERP system for academic institution management with OBE compliance.',
-                tech: 'Next.js, Nest.js, PostgreSQL',
-                features: [
-                  'Implemented OBE (Outcome-Based Education) framework',
-                  'Real-time attendance tracking and class scheduling system',
-                  'Multi-role architecture: Super Admin, Department Admin, Teacher, and Student dashboards',
-                  'Comprehensive reporting and analytics modules',
-                ],
-                links: {
-                  github: null,
-                  demo: null,
-                },
+                title: 'University Admission Portal',
+                desc: 'Comprehensive system for MNSUET processing thousands of live admissions for the 2025 batch.',
+                tech: ['Next.js', 'PostgreSQL'],
+                demo: 'https://admissions.mnsuet.edu.pk'
               },
               {
                 title: 'JanJapan Cars System',
-                description:
-                  'Complete system migration from PHP to modern Next.js/Nest.js architecture for automotive marketplace.',
-                tech: 'Next.js, Nest.js, MongoDB',
-                features: [
-                  'Full-featured inventory management system',
-                  'Real-time auction system with live bidding',
-                  'Advanced search and filtering capabilities',
-                  'Performance optimization resulting in 3x faster load times',
-                ],
-                links: {
-                  github: null,
-                  demo: 'https://janjapan.com',
-                },
+                desc: 'Automotive marketplace with real-time bidding and performance-optimized inventory management.',
+                tech: ['Next.js', 'Nest.js', 'MongoDB'],
+                demo: 'https://janjapan.com'
               },
               {
-                title: 'Venbid - Service Provider Platform',
-                description:
-                  'On-demand home services marketplace connecting customers with verified service providers (UK Client).',
-                tech: 'React.js, Node.js, MongoDB',
-                features: [
-                  'Three-tier system: Customer, Vendor, and Admin portals',
-                  'Service categories: Furniture repair, plumbing, electrical, and more',
-                  'Real-time booking and scheduling system',
-                  'Rating and review management',
-                ],
-                links: {
-                  github: null,
-                  demo: null,
-                },
-              },
-              {
-                title: 'Asan Umrah Committee',
-                description:
-                  'Digital platform for managing online committee operations and member contributions.',
-                tech: 'Laravel, MySQL',
-                features: [
-                  'Member registration and payment tracking',
-                  'Automated installment calculations',
-                  'Financial reporting and transparency features',
-                ],
-                links: {
-                  github: null,
-                  demo: null,
-                },
-              },
-              {
-                title: 'OrderTik - Restaurant Management',
-                description:
-                  'Complete restaurant order management system with driver tracking capabilities.',
-                tech: 'Laravel, MySQL, Google Maps API',
-                features: [
-                  'Real-time order processing and kitchen management',
-                  'Driver assignment and live GPS tracking',
-                  'Admin dashboard with analytics and reporting',
-                ],
-                links: {
-                  github: null,
-                  demo: 'https://jalal.ordertik.com',
-                },
+                title: 'OrderTik Management',
+                desc: 'Real-time logistics platform for restaurant fleet management and driver tracking.',
+                tech: ['Laravel', 'Google Maps API'],
+                demo: 'https://jalal.ordertik.com'
               },
               {
                 title: 'AI Chatbot System',
-                description:
-                  'Intelligent chatbot implementation for automated customer support and engagement.',
-                tech: 'Next.js, Node.js, AI APIs',
-                features: [
-                  'Natural language processing integration',
-                  'Contextual conversation management',
-                  'Admin panel for training and analytics',
-                ],
-                links: {
-                  github: null,
-                  demo: null,
-                },
-              },
+                desc: 'Intelligent support system with NLP integration for automated customer engagement.',
+                tech: ['Next.js', 'AI APIs'],
+              }
             ].map((project, index) => (
-              <div
-                key={index}
-                className="bg-slate-800 p-[50px] border border-slate-700 hover:border-cyan-400 transition-colors rounded-lg"
-              >
-                <h3 className="text-[32px] font-bold text-white mb-[20px] hover:text-cyan-400 transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-gray-300 font-light mb-[30px] leading-[1.8] text-[18px]">
-                  {project.description}
-                </p>
-                <div className="mb-[30px]">
-                  <p className="text-[12px] font-light text-gray-400 uppercase tracking-[2px] mb-[12px]">
-                    Tech Stack
-                  </p>
-                  <p className="text-[16px] text-cyan-400 font-medium">
-                    {project.tech}
-                  </p>
+              <div key={index} className="glass-card group p-10 rounded-[2.5rem] flex flex-col border border-white/5 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 text-white/5 group-hover:text-accent-primary/20 transition-colors">
+                  <ExternalLink size={60} />
                 </div>
-                <ul className="space-y-[12px]">
-                  {project.features.map((feature, i) => (
-                    <li
-                      key={i}
-                      className="text-gray-300 font-light text-[16px] flex items-center gap-[12px]"
-                    >
-                      <div className="w-[4px] h-[4px] bg-cyan-400 rounded-full" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                {project.links && (project.links.github || project.links.demo) && (
-                  <div className="flex gap-[16px] mt-[30px] pt-[20px] border-t border-slate-600">
-                    {project.links.github && (
-                      <a
-                        href={project.links.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-[8px] text-gray-400 hover:text-cyan-400 transition-colors text-[14px] font-light"
-                      >
-                        <Github size={16} />
-                        Code
-                      </a>
-                    )}
-                    {project.links.demo && (
-                      <a
-                        href={project.links.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-[8px] text-gray-400 hover:text-cyan-400 transition-colors text-[14px] font-light"
-                      >
-                        <ExternalLink size={16} />
-                        Live Demo
-                      </a>
-                    )}
-                  </div>
-                )}
+                <div className="flex gap-2 mb-6">
+                  {project.tech.map(t => <span key={t} className="text-[10px] font-bold text-accent-primary bg-accent-primary/10 px-3 py-1 rounded-lg uppercase tracking-widest">{t}</span>)}
+                </div>
+                <h3 className="text-3xl font-display font-bold text-white mb-4 group-hover:text-accent-primary transition-colors">{project.title}</h3>
+                <p className="text-gray-400 font-sans leading-relaxed mb-10">{project.desc}</p>
+                <div className="mt-auto flex items-center gap-6">
+                  {project.demo && (
+                    <a href={project.demo} target="_blank" className="text-white font-bold flex items-center gap-2 group/link border-b-2 border-white/10 pb-1 hover:border-accent-primary transition-all">
+                      Live View
+                      <ArrowRight size={18} className="group-hover/link:translate-x-1 transition-transform" />
+                    </a>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Education Section */}
-      <div className="min-h-screen flex items-center py-[120px] bg-slate-800">
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
-          <div className="mb-[100px]">
-            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
-              Education
-            </h2>
-            <div className="w-[80px] h-[2px] bg-cyan-400" />
-          </div>
-          <div className="max-w-[1000px]">
-            <div className="border-l-2 border-cyan-400 pl-[60px] relative">
-              <div className="absolute -left-[7px] top-0 w-[14px] h-[14px] bg-cyan-400 rounded-full" />
-              <div className="bg-slate-900 p-[40px] rounded-lg border border-slate-700">
-                <h3 className="text-[36px] font-bold text-white mb-[12px]">
-                  Bachelor of Science in Computer Science (BSCS)
-                </h3>
-                <p className="text-[24px] text-gray-300 font-light mb-[8px]">
-                  Muhammad Nawaz Sharif University of Engineering & Technology,
-                  Multan
-                </p>
-                <p className="text-[16px] text-gray-400 font-light mb-[30px] bg-slate-700 px-3 py-1 rounded inline-block">
-                  2021 - 2025
-                </p>
-                <p className="text-gray-300 font-light leading-[1.8] text-[18px]">
-                  Comprehensive computer science education covering software
-                  engineering, data structures, algorithms, database systems, and
-                  web technologies. Final year project on AI-powered web applications.
+      {/* Education & Certs */}
+      <section className="py-32 relative bg-background">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="grid lg:grid-cols-2 gap-16">
+            {/* Education */}
+            <div>
+              <h2 className="text-4xl font-display font-bold text-white mb-12 flex items-center gap-4">
+                <GraduationCap className="text-accent-primary" size={32} />
+                Education
+              </h2>
+              <div className="glass-card p-10 rounded-[2rem] border-l-4 border-l-accent-primary">
+                <div className="text-accent-primary font-bold text-sm mb-2 uppercase tracking-widest">2021 — 2025</div>
+                <h3 className="text-2xl font-display font-bold text-white mb-2">BS in Computer Science</h3>
+                <p className="text-gray-400 mb-6">MNS University of Engineering & Technology</p>
+                <div className="h-px bg-white/5 mb-6" />
+                <p className="text-gray-300 font-sans leading-relaxed">
+                  Focusing on software engineering, distributed systems, and modern web architectures.
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Certifications & Awards Section */}
-      <div className="min-h-screen flex items-center py-[120px] bg-slate-900">
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
-          <div className="mb-[100px]">
-            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
-              Certifications & Awards
-            </h2>
-            <div className="w-[80px] h-[2px] bg-cyan-400" />
-          </div>
-          <div className="grid md:grid-cols-2 gap-[80px]">
+            {/* Certifications */}
             <div>
-              <h3 className="text-[32px] font-bold text-white mb-[40px] border-b border-slate-600 pb-[20px]">
+              <h2 className="text-4xl font-display font-bold text-white mb-12 flex items-center gap-4">
+                <Award className="text-accent-secondary" size={32} />
                 Certifications
-              </h3>
-              <div className="space-y-[30px]">
+              </h2>
+              <div className="space-y-4">
                 {[
-                  {
-                    title: 'AWS Certified Cloud Practitioner',
-                    issuer: 'Amazon Web Services',
-                    date: '2024',
-                    credentialId: 'AWS-CP-2024-001',
-                  },
-                  {
-                    title: 'React Developer Certification',
-                    issuer: 'Meta (Facebook)',
-                    date: '2023',
-                    credentialId: 'META-REACT-2023',
-                  },
-                  {
-                    title: 'Node.js Application Development',
-                    issuer: 'IBM',
-                    date: '2023',
-                    credentialId: 'IBM-NODE-2023',
-                  },
-                  {
-                    title: 'Laravel Certified Developer',
-                    issuer: 'Laravel',
-                    date: '2022',
-                    credentialId: 'LARAVEL-CERT-2022',
-                  },
-                ].map((cert, index) => (
-                  <div key={index} className="border-l-2 border-cyan-400 pl-[30px] relative">
-                    <div className="absolute -left-[7px] top-0 w-[14px] h-[14px] bg-cyan-400 rounded-full" />
-                    <div className="bg-slate-800 p-[30px] rounded-lg border border-slate-700">
-                      <h4 className="text-[24px] font-bold text-white mb-[8px]">
-                        {cert.title}
-                      </h4>
-                      <p className="text-[18px] text-gray-300 font-light mb-[4px]">
-                        {cert.issuer}
-                      </p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-[14px] text-gray-400 font-light bg-slate-700 px-3 py-1 rounded">
-                          {cert.date}
-                        </span>
-                        <span className="text-[12px] text-gray-400 font-light uppercase tracking-[1px] bg-slate-700 px-3 py-1 rounded">
-                          ID: {cert.credentialId}
-                        </span>
-                      </div>
+                  { title: 'AWS Cloud Practitioner', issuer: 'Amazon Web Services' },
+                  { title: 'React Developer Cert', issuer: 'Meta' },
+                  { title: 'Node.js Dev Cert', issuer: 'IBM' },
+                ].map((cert, i) => (
+                  <div key={i} className="glass p-6 rounded-2xl flex items-center justify-between group hover:bg-white/5 transition-colors">
+                    <div>
+                      <h4 className="text-white font-bold">{cert.title}</h4>
+                      <p className="text-sm text-gray-500">{cert.issuer}</p>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="text-[32px] font-bold text-white mb-[40px] border-b border-slate-600 pb-[20px]">
-                Awards & Recognition
-              </h3>
-              <div className="space-y-[30px]">
-                {[
-                  {
-                    title: 'Employee of the Year',
-                    issuer: 'KK IT Solutions Pvt LTD',
-                    date: '2024',
-                    description: 'Recognized for outstanding performance and leadership in full-stack development projects.',
-                  },
-                  {
-                    title: 'Best Project Award',
-                    issuer: 'KK IT Solutions Pvt LTD',
-                    date: '2023',
-                    description: 'Awarded for JanJapan Cars System migration project achieving 300% performance improvement.',
-                  },
-                  {
-                    title: 'Top Developer Award',
-                    issuer: 'KK IT Solutions Pvt LTD',
-                    date: '2022',
-                    description: 'Recognized for exceptional contribution to OrderTik restaurant management platform.',
-                  },
-                  {
-                    title: 'University Merit Scholarship',
-                    issuer: 'MNSUET',
-                    date: '2021-2023',
-                    description: 'Academic excellence award for maintaining top 5% GPA in Computer Science program.',
-                  },
-                ].map((award, index) => (
-                  <div key={index} className="bg-slate-800 p-[30px] rounded-lg border border-slate-700">
-                    <div className="flex items-start justify-between mb-[16px]">
-                      <h4 className="text-[20px] font-bold text-white">
-                        {award.title}
-                      </h4>
-                      <span className="text-[14px] text-gray-400 font-light bg-slate-700 px-3 py-1 rounded">
-                        {award.date}
-                      </span>
-                    </div>
-                    <p className="text-[16px] text-gray-300 font-light mb-[12px]">
-                      {award.issuer}
-                    </p>
-                    <p className="text-[16px] text-gray-300 font-light leading-[1.6]">
-                      {award.description}
-                    </p>
+                    <ExternalLink size={16} className="text-gray-600 group-hover:text-accent-secondary transition-colors" />
                   </div>
                 ))}
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Testimonials Section */}
-      <div className="min-h-screen flex items-center py-[120px] bg-slate-800">
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
-          <div className="mb-[100px] text-center">
-            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
-              Testimonials
-            </h2>
-            <div className="w-[80px] h-[2px] bg-cyan-400 mx-auto mb-[40px]" />
-            <p className="text-[20px] text-gray-300 font-light max-w-[600px] mx-auto">
-              What clients and colleagues say about working with me
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-[40px]">
+      {/* Testimonials - Minimal & Elegant */}
+      <section className="py-32 bg-white/5">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
+          <h2 className="text-5xl font-display font-bold text-gradient mb-20 text-center">Wall of Love</h2>
+          <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                quote: "Hassan delivered exceptional work on our university admission portal. His attention to detail and technical expertise helped us successfully manage admissions for over 2000 students. Highly recommended!",
+                quote: "Hassan's expertise in Next.js transformed our admission workflow completely.",
                 author: "Dr. Ahmed Khan",
-                position: "Director Admissions, MNSUET",
-                company: "Muhammad Nawaz Sharif University",
-                avatar: "👨‍🏫",
+                role: "Director, MNSUET"
               },
               {
-                quote: "Working with Hassan on the JanJapan Cars project was outstanding. He successfully migrated our legacy system and improved performance by 300%. His problem-solving skills are exceptional.",
+                quote: "The best full-stack partner we've had. Fast, reliable, and technically solid.",
                 author: "Muhammad Ali",
-                position: "CEO",
-                company: "KK IT Solutions Pvt LTD",
-                avatar: "👨‍💼",
+                role: "CEO, KK IT Solutions"
               },
               {
-                quote: "Hassan's expertise in full-stack development and his ability to deliver complex projects on time made him an invaluable asset to our team. The OrderTik platform he built exceeded our expectations.",
+                quote: "Exceptional problem solver. His architecture for OrderTik was flawless.",
                 author: "Sara Ahmed",
-                position: "Project Manager",
-                company: "KK IT Solutions Pvt LTD",
-                avatar: "👩‍💼",
-              },
-              {
-                quote: "I hired Hassan for a freelance project and was impressed by his professionalism and technical skills. He delivered a high-quality React application that perfectly met our requirements.",
-                author: "John Smith",
-                position: "Founder",
-                company: "Venbid UK",
-                avatar: "👨‍💻",
-              },
-              {
-                quote: "Hassan's mentorship and code review skills helped improve our team's overall code quality. He's not just a great developer but also an excellent team player and leader.",
-                author: "Maria Rodriguez",
-                position: "Senior Developer",
-                company: "KK IT Solutions Pvt LTD",
-                avatar: "👩‍💻",
-              },
-              {
-                quote: "The ERP system Hassan developed for our educational institution has transformed our operations. His understanding of business requirements and technical implementation is outstanding.",
-                author: "Dr. Fatima Hassan",
-                position: "Academic Director",
-                company: "Educational Institution",
-                avatar: "👩‍🎓",
-              },
-            ].map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-slate-800 p-[40px] border border-slate-700 rounded-lg hover:border-cyan-400 transition-colors"
-              >
-                <div className="text-gray-300 font-light text-[16px] leading-[1.6] mb-[30px] italic">
-                  "{testimonial.quote}"
-                </div>
-                <div className="flex items-center gap-[16px]">
-                  <div className="w-[50px] h-[50px] bg-cyan-500 text-white flex items-center justify-center text-[20px] font-light rounded-full">
-                    {testimonial.avatar}
+                role: "Project Manager"
+              }
+            ].map((t, i) => (
+              <div key={i} className="glass-card p-10 rounded-[2rem] text-left">
+                <div className="text-accent-primary text-4xl mb-6 font-serif opacity-30">“</div>
+                <p className="text-gray-300 font-sans italic mb-8 leading-relaxed">
+                  {t.quote}
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-primary to-accent-secondary flex items-center justify-center text-xs font-bold text-white">
+                    {t.author.charAt(0)}
                   </div>
                   <div>
-                    <div className="text-[16px] font-bold text-white mb-[4px]">
-                      {testimonial.author}
-                    </div>
-                    <div className="text-[14px] text-gray-300 font-light">
-                      {testimonial.position}
-                    </div>
-                    <div className="text-[12px] text-gray-400 font-light uppercase tracking-[1px]">
-                      {testimonial.company}
-                    </div>
+                    <div className="text-white font-bold text-sm">{t.author}</div>
+                    <div className="text-gray-500 text-xs">{t.role}</div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Contact Page/Tab */}
-      <div
+      {/* Contact Section */}
+      <section
         id="contact"
         ref={setSectionRef('contact')}
-        className="min-h-screen flex items-center py-[120px] bg-slate-900 text-white"
+        className="py-32 relative overflow-hidden bg-background"
       >
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
-          <div className="mb-[100px]">
-            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
-              Let's Work Together
-            </h2>
-            <div className="w-[80px] h-[2px] bg-cyan-400" />
+        <div className="mesh-bg opacity-30" />
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-7xl font-display font-bold text-white mb-6">Get In <span className="text-gradient">Touch</span></h2>
+            <p className="text-gray-400 max-w-xl mx-auto font-sans">Let's build something extraordinary together. I'm currently available for interesting new projects.</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-[120px] items-center">
-            <div>
-              <div className="mb-[40px]">
-                <div className="inline-flex items-center gap-[12px] bg-green-500 text-white px-[16px] py-[8px] text-[14px] font-light mb-[30px]">
-                  <div className="w-[8px] h-[8px] bg-white rounded-full animate-pulse" />
-                  Available for new projects
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            {[
+              { icon: Mail, label: 'Email', value: 'itzhassanraza276@gmail.com', href: 'mailto:itzhassanraza276@gmail.com' },
+              { icon: Phone, label: 'Phone', value: '+92 309 6185276', href: 'tel:+923096185276' },
+              { icon: MapPin, label: 'Location', value: 'Multan, Pakistan', href: '#' },
+            ].map((item, i) => (
+              <a key={i} href={item.href} className="glass-card p-10 rounded-[2rem] flex flex-col items-center text-center group">
+                <div className="w-16 h-16 rounded-2xl bg-accent-primary/10 text-accent-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <item.icon size={32} />
                 </div>
-              </div>
-              <p className="text-[24px] font-light text-[#ccc] mb-[40px] leading-[1.6]">
-                I'm always excited to work on challenging projects and collaborate
-                with innovative teams. Let's build something amazing together.
-              </p>
-              <div className="space-y-[20px]">
-                <div className="flex items-center gap-[16px]">
-                  <div className="w-[6px] h-[6px] bg-[#666] rounded-full" />
-                  <span className="text-[#999] font-light text-[18px]">
-                    Full-time opportunities
-                  </span>
-                </div>
-                <div className="flex items-center gap-[16px]">
-                  <div className="w-[6px] h-[6px] bg-[#666] rounded-full" />
-                  <span className="text-[#999] font-light text-[18px]">
-                    Freelance projects
-                  </span>
-                </div>
-                <div className="flex items-center gap-[16px]">
-                  <div className="w-[6px] h-[6px] bg-[#666] rounded-full" />
-                  <span className="text-[#999] font-light text-[18px]">
-                    Technical consulting
-                  </span>
-                </div>
-              </div>
-              <div className="mt-[60px]">
-                <a
-                  href="mailto:itzhassanraza276@gmail.com?subject=Project%20Inquiry&body=Hi%20Hassan,%20I'd%20like%20to%20discuss%20a%20project%20with%20you."
-                  className="group inline-flex items-center gap-[12px] bg-white text-[#1a1a1a] px-[40px] py-[16px] hover:bg-[#f5f5f5] transition-all duration-300 text-[14px] font-normal tracking-[1px] uppercase"
-                >
-                  Start a Conversation
-                  <ArrowRight
-                    size={18}
-                    className="transform group-hover:translate-x-1 transition-transform"
-                  />
-                </a>
-              </div>
+                <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">{item.label}</div>
+                <div className="text-white font-medium text-lg">{item.value}</div>
+              </a>
+            ))}
+          </div>
+
+          {/* Socials & Additional Info */}
+          <div className="mt-20 flex flex-col md:flex-row gap-8 items-center justify-center">
+            <div className="flex gap-4">
+              <a href="https://linkedin.com/in/hassanraza276" target="_blank" className="p-4 rounded-2xl bg-white/5 border border-white/10 text-white hover:bg-accent-primary hover:border-accent-primary transition-all">
+                <Linkedin size={24} />
+              </a>
+              <a href="https://github.com/hassanraza276" target="_blank" className="p-4 rounded-2xl bg-white/5 border border-white/10 text-white hover:bg-white hover:text-background transition-all">
+                <Github size={24} />
+              </a>
             </div>
-            <div className="space-y-[40px]">
-              {[
-                {
-                  icon: Mail,
-                  label: 'Email',
-                  value: 'itzhassanraza276@gmail.com',
-                  href: 'mailto:itzhassanraza276@gmail.com',
-                  description: 'Drop me a line anytime',
-                },
-                {
-                  icon: Phone,
-                  label: 'Phone',
-                  value: '+92 329 7901828',
-                  href: 'tel:+923297901828',
-                  description: 'Available for calls',
-                },
-                {
-                  icon: MapPin,
-                  label: 'Location',
-                  value: 'Multan, Punjab, Pakistan',
-                  href: null,
-                  description: 'Open to remote work worldwide',
-                },
-                {
-                  icon: Globe,
-                  label: 'Timezone',
-                  value: 'PKT (UTC+5)',
-                  href: null,
-                  description: 'Flexible working hours',
-                },
-              ].map((contact, index) => {
-                const Component = contact.href ? 'a' : 'div';
-                return (
-                  <Component
-                    key={index}
-                    href={contact.href || undefined}
-                    className={`flex items-start gap-[24px] group p-[30px] bg-[#222] hover:bg-[#333] transition-colors ${contact.href ? 'cursor-pointer' : ''
-                      }`}
-                  >
-                    <contact.icon size={24} className="text-[#666] mt-[4px] group-hover:text-white transition-colors" />
-                    <div className="flex-1">
-                      <div className="text-[12px] font-light text-[#666] uppercase tracking-[2px] mb-[8px]">
-                        {contact.label}
-                      </div>
-                      <div className="text-[18px] font-light text-white mb-[4px]">
-                        {contact.value}
-                      </div>
-                      <div className="text-[14px] text-[#999] font-light">
-                        {contact.description}
-                      </div>
-                    </div>
-                  </Component>
-                );
-              })}
-              <div className="pt-[40px] border-t border-[#333]">
-                <p className="text-[14px] text-[#666] font-light uppercase tracking-[2px] mb-[20px]">
-                  Connect with me
-                </p>
-                <div className="flex gap-[24px]">
-                  <a
-                    href="https://linkedin.com/in/hassan-raza-42280221b"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#666] hover:text-white transition-colors p-[12px] hover:bg-[#333] rounded-full"
-                    title="LinkedIn Profile"
-                  >
-                    <Linkedin size={24} />
-                  </a>
-                  <a
-                    href="https://github.com/hassan-raza-111"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#666] hover:text-white transition-colors p-[12px] hover:bg-[#333] rounded-full"
-                    title="Primary GitHub"
-                  >
-                    <Github size={24} />
-                  </a>
-                  <a
-                    href="https://github.com/hassan-raza123"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#666] hover:text-white transition-colors p-[12px] hover:bg-[#333] rounded-full"
-                    title="Secondary GitHub"
-                  >
-                    <Github size={24} />
-                  </a>
-                </div>
+
+            <div className="h-px w-20 bg-white/10 hidden md:block" />
+
+            <div className="flex gap-8 text-sm font-bold tracking-widest uppercase text-gray-500">
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-1 rounded-full bg-accent-primary" />
+                English (Fluent)
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-1 rounded-full bg-accent-secondary" />
+                Urdu (Native)
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Languages Section */}
-      <div className="py-[120px] bg-slate-800">
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
-          <div className="mb-[100px]">
-            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
-              Languages
-            </h2>
-            <div className="w-[80px] h-[2px] bg-cyan-400" />
-          </div>
-          <div className="grid md:grid-cols-2 gap-[40px]">
-            {[
-              { language: 'English', proficiency: 'Professional Working Proficiency' },
-              { language: 'Urdu', proficiency: 'Native Proficiency' },
-            ].map((lang, index) => (
-              <div key={index} className="bg-slate-900 p-[40px] border border-slate-700 rounded-lg">
-                <h3 className="text-[32px] font-bold text-white mb-[10px]">{lang.language}</h3>
-                <p className="text-cyan-400 font-light text-[18px]">{lang.proficiency}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Hobbies & Interests Section */}
-      <div className="py-[120px] bg-slate-900">
-        <div className="max-w-[1920px] mx-auto px-[60px] w-full">
-          <div className="mb-[100px]">
-            <h2 className="text-[80px] md:text-[100px] font-bold text-cyan-400 mb-[40px] tracking-[-2px]">
-              Hobbies & Interests
-            </h2>
-            <div className="w-[80px] h-[2px] bg-cyan-400" />
-          </div>
-          <div className="flex flex-wrap gap-[20px]">
-            {[
-              'Learning New Technologies',
-              'Hardware Repair',
-              'Movies',
-              'Music Listening',
-            ].map((hobby, index) => (
-              <span
-                key={index}
-                className="bg-slate-800 border border-slate-600 text-gray-300 px-[30px] py-[15px] text-[18px] font-light hover:border-cyan-400 hover:text-cyan-400 transition-colors"
-              >
-                {hobby}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
+      </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 border-t border-slate-700 py-[60px]">
-        <div className="max-w-[1920px] mx-auto px-[60px]">
-          <div className="text-center">
-            <p className="text-gray-400 font-light text-[14px]">
-              © 2025 Hassan Raza. All rights reserved.
-            </p>
+      <footer className="py-12 border-t border-white/5 bg-background">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="text-gray-500 text-sm font-sans">
+            © {new Date().getFullYear()} Hassan Raza. Built with <span className="text-white font-medium">Next.js 15 & Tailwind 4</span>
+          </div>
+          <div className="flex gap-8">
+            <button onClick={() => scrollToTab('home')} className="text-gray-500 hover:text-white transition-colors text-sm uppercase tracking-widest font-bold">Back to Top</button>
           </div>
         </div>
       </footer>
 
-      {/* Print Styles */}
+      {/* Modern Print Styles */}
       <style jsx global>{`
         @media print {
-          nav,
-          footer,
-          button {
-            display: none !important;
-          }
-          section,
-          div[id] {
-            page-break-inside: avoid;
-          }
+          nav, footer, .mesh-bg, .animate-ping, .animate-bounce { display: none !important; }
+          body { background: white !important; color: black !important; }
+          .glass-card { background: white !important; border: 1px solid #ddd !important; box-shadow: none !important; color: black !important; }
+          .text-gradient { background: none !important; -webkit-text-fill-color: black !important; color: black !important; font-weight: bold; }
+          .text-gray-400, .text-gray-500 { color: #666 !important; }
+          .glass { background: white !important; border: 1px solid #ddd !important; }
         }
       `}</style>
     </div>
