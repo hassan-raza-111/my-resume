@@ -1,10 +1,13 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #0a0a0c;
-  --foreground: #f8fafc;
-  --accent-primary: #6366f1;
-  --accent-secondary: #a855f7;
+  --background: #000000;
+  --foreground: #ffffff;
+  --accent-primary: #3b82f6;
+  /* Electric Blue */
+  --accent-secondary: #2563eb;
+  --surface: #0a0a0a;
+  --border: #1a1a1a;
 }
 
 @theme inline {
@@ -12,6 +15,8 @@
   --color-foreground: var(--foreground);
   --color-accent-primary: var(--accent-primary);
   --color-accent-secondary: var(--accent-secondary);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
   --font-sans: var(--font-inter);
   --font-display: var(--font-outfit);
 }
@@ -25,33 +30,29 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Glassmorphism utility */
+/* Sharp Minimalist Utilities */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(99, 102, 241, 0.4);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5),
-    0 0 20px -5px rgba(99, 102, 241, 0.2);
+  border-color: #333333;
+  transform: translateY(-2px);
 }
 
-/* Mesh Gradient Background */
+/* Mesh Gradient Background - Organic & Dynamic */
 .mesh-bg {
   position: absolute;
   top: 0;
@@ -61,40 +62,45 @@ body {
   z-index: -1;
   background-color: var(--background);
   background-image:
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(99, 102, 241, 0.1) 0px, transparent 50%);
+    radial-gradient(at 10% 20%, rgba(16, 185, 129, 0.08) 0px, transparent 40%),
+    radial-gradient(at 90% 80%, rgba(5, 150, 105, 0.08) 0px, transparent 40%),
+    radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.1) 0px, transparent 60%);
+  filter: blur(60px);
 }
 
-/* Section Header Gradient */
+/* Editorial Text Gradient */
 .text-gradient {
-  background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+  background: linear-gradient(to right, #ffffff 0%, #a1a1aa 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+/* Bento-style grid border */
+.bento-border {
+  border: 1px solid var(--border);
+}
+
 /* Modern scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0c;
+  background: #000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 10px;
+  background: #222;
+  border-radius: 0px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6366f1;
+  background: var(--accent-primary);
 }
 
 /* Selection styling */
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
+  background: var(--accent-primary);
   color: white;
 }
