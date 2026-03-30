@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Brand — Deep Indigo (Corporate Sales) */
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
+
+  /* Accent — Amber (Targets, Urgency, CTAs) */
+  --color-accent-50: #fffbeb;
+  --color-accent-100: #fef3c7;
+  --color-accent-200: #fde68a;
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+
+  /* Sidebar */
+  --color-sidebar-bg: #1e1b4b;
+  --color-sidebar-hover: #312e81;
+  --color-sidebar-active: #4f46e5;
+  --color-sidebar-text: #c7d2fe;
+  --color-sidebar-text-muted: #a5b4fc;
+  --color-sidebar-border: #312e81;
+
+  /* Surface */
+  --color-surface: #ffffff;
+  --color-surface-hover: #eef2ff;
+  --color-border: #e0e7ff;
+  --color-border-strong: #c7d2fe;
+
+  /* Semantic */
+  --color-background: #f8fafc;
+  --color-foreground: #0f172a;
+
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* Scrollbar styling for sidebar */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #312e81;
+  border-radius: 9999px;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a5b4fc;
+}

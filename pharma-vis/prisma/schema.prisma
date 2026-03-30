@@ -1,0 +1,544 @@
+// Pharma Field Force Sales Management System
+// Database: MySQL
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ==========================================
+// AUTH & USER MANAGEMENT
+// ==========================================
+
+enum UserRole {
+  ADMIN
+  REGIONAL_MANAGER
+  AREA_SALES_MANAGER
+  MEDICAL_REP
+  DISTRIBUTOR
+  PHARMA_CLIENT
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model User {
+  id          String     @id @default(cuid())
+  email       String     @unique
+  password    String
+  name        String
+  phone       String?
+  avatar      String?
+  role        UserRole
+  status      UserStatus @default(ACTIVE)
+  territoryId String?
+  territory   Territory? @relation(fields: [territoryId], references: [id])
+  managerId   String?
+  manager     User?      @relation("ManagerSubordinates", fields: [managerId], references: [id])
+  subordinates User[]    @relation("ManagerSubordinates")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  visits       Visit[]
+  orders       Order[]
+  expenses     Expense[]
+  attendances  Attendance[]
+  callPlans    CallPlan[]
+  auditLogs    AuditLog[]
+  notifications Notification[]
+
+  @@index([role])
+  @@index([territoryId])
+  @@index([managerId])
+}
+
+// ==========================================
+// TERRITORY & GEOGRAPHY
+// ==========================================
+
+model Territory {
+  id        String      @id @default(cuid())
+  name      String
+  code      String      @unique
+  parentId  String?
+  parent    Territory?  @relation("TerritoryHierarchy", fields: [parentId], references: [id])
+  children  Territory[] @relation("TerritoryHierarchy")
+  level     Int         // 1=Region, 2=Area, 3=Zone
+  createdAt DateTime    @default(now())
+
+  users   User[]
+  doctors Doctor[]
+  outlets Outlet[]
+  routes  Route[]
+
+  @@index([parentId])
+  @@index([level])
+}
+
+// ==========================================
+// DOCTOR & OUTLET MANAGEMENT
+// ==========================================
+
+enum DoctorCategory {
+  A_PLUS
+  A
+  B
+  C
+}
+
+model Doctor {
+  id             String         @id @default(cuid())
+  name           String
+  specialization String
+  phone          String?
+  email          String?
+  address        String?        @db.Text
+  latitude       Float?
+  longitude      Float?
+  category       DoctorCategory @default(B)
+  hospitalName   String?
+  territoryId    String?
+  territory      Territory?     @relation(fields: [territoryId], references: [id])
+  isActive       Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  visits        Visit[]
+  samples       SampleDistribution[]
+  prescriptions Prescription[]
+
+  @@index([territoryId])
+  @@index([specialization])
+  @@index([category])
+}
+
+model Outlet {
+  id          String     @id @default(cuid())
+  name        String
+  type        String     // Pharmacy, Hospital, Clinic
+  address     String     @db.Text
+  latitude    Float?
+  longitude   Float?
+  phone       String?
+  ownerName   String?
+  territoryId String?
+  territory   Territory? @relation(fields: [territoryId], references: [id])
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+
+  orders      Order[]
+  shelfAudits ShelfAudit[]
+
+  @@index([territoryId])
+  @@index([type])
+}
+
+// ==========================================
+// FIELD FORCE — VISITS & DCR
+// ==========================================
+
+enum VisitStatus {
+  PLANNED
+  CHECKED_IN
+  COMPLETED
+  MISSED
+  CANCELLED
+}
+
+model Visit {
+  id             String      @id @default(cuid())
+  repId          String
+  rep            User        @relation(fields: [repId], references: [id])
+  doctorId       String
+  doctor         Doctor      @relation(fields: [doctorId], references: [id])
+  visitDate      DateTime
+  status         VisitStatus @default(PLANNED)
+  checkInTime    DateTime?
+  checkOutTime   DateTime?
+  checkInLat     Float?
+  checkInLng     Float?
+  checkOutLat    Float?
+  checkOutLng    Float?
+  detailingNotes String?     @db.Text
+  doctorFeedback String?     @db.Text
+  nextVisitDate  DateTime?
+  createdAt      DateTime    @default(now())
+
+  samples SampleDistribution[]
+
+  @@index([repId])
+  @@index([doctorId])
+  @@index([visitDate])
+  @@index([status])
+}
+
+model SampleDistribution {
+  id        String   @id @default(cuid())
+  visitId   String
+  visit     Visit    @relation(fields: [visitId], references: [id])
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  createdAt DateTime @default(now())
+
+  @@index([visitId])
+  @@index([doctorId])
+}
+
+model CallPlan {
+  id         String   @id @default(cuid())
+  repId      String
+  rep        User     @relation(fields: [repId], references: [id])
+  planDate   DateTime
+  doctorIds  Json     // JSON array of doctor IDs
+  routeId    String?
+  route      Route?   @relation(fields: [routeId], references: [id])
+  isApproved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([repId])
+  @@index([planDate])
+}
+
+// ==========================================
+// PRODUCTS & SKU
+// ==========================================
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  sku         String   @unique
+  genericName String?
+  category    String?  // Tablet, Syrup, Injection, etc.
+  brand       String?
+  unitPrice   Float
+  packSize    String?  // e.g., "10 tablets/strip"
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems   OrderItem[]
+  samples      SampleDistribution[]
+  stockEntries Stock[]
+  schemes      Scheme[]
+
+  @@index([sku])
+  @@index([category])
+}
+
+model Scheme {
+  id            String   @id @default(cuid())
+  name          String
+  productId     String
+  product       Product  @relation(fields: [productId], references: [id])
+  discountType  String   // PERCENTAGE, FLAT, BUY_X_GET_Y
+  discountValue Float
+  minQuantity   Int?
+  startDate     DateTime
+  endDate       DateTime
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  @@index([productId])
+  @@index([startDate, endDate])
+}
+
+// ==========================================
+// ORDER MANAGEMENT
+// ==========================================
+
+enum OrderStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  DISPATCHED
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+enum OrderType {
+  PRIMARY   // Company -> Distributor
+  SECONDARY // Distributor -> Pharmacy
+  FIELD     // Field rep order
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
+  type          OrderType
+  status        OrderStatus @default(PENDING)
+  repId         String?
+  rep           User?       @relation(fields: [repId], references: [id])
+  outletId      String?
+  outlet        Outlet?     @relation(fields: [outletId], references: [id])
+  distributorId String?
+  distributor   Distributor? @relation(fields: [distributorId], references: [id])
+  subtotal      Float
+  discount      Float       @default(0)
+  tax           Float       @default(0)
+  totalAmount   Float
+  notes         String?     @db.Text
+  approvedBy    String?
+  approvedAt    DateTime?
+  dispatchedAt  DateTime?
+  deliveredAt   DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  items   OrderItem[]
+  invoice Invoice?
+
+  @@index([status])
+  @@index([repId])
+  @@index([outletId])
+  @@index([distributorId])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id          String  @id @default(cuid())
+  orderId     String
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product @relation(fields: [productId], references: [id])
+  quantity    Int
+  unitPrice   Float
+  discount    Float   @default(0)
+  totalPrice  Float
+  batchNumber String?
+
+  @@index([orderId])
+}
+
+// ==========================================
+// DISTRIBUTION MANAGEMENT
+// ==========================================
+
+model Distributor {
+  id            String   @id @default(cuid())
+  name          String
+  code          String   @unique
+  address       String?  @db.Text
+  phone         String?
+  email         String?
+  creditLimit   Float    @default(0)
+  currentCredit Float    @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  orders   Order[]
+  stocks   Stock[]
+  invoices Invoice[]
+  payments Payment[]
+
+  @@index([code])
+}
+
+model Stock {
+  id            String      @id @default(cuid())
+  distributorId String
+  distributor   Distributor @relation(fields: [distributorId], references: [id])
+  productId     String
+  product       Product     @relation(fields: [productId], references: [id])
+  quantity      Int
+  batchNumber   String?
+  expiryDate    DateTime?
+  lastUpdated   DateTime    @default(now())
+
+  @@unique([distributorId, productId, batchNumber])
+  @@index([distributorId])
+  @@index([productId])
+}
+
+model Invoice {
+  id            String      @id @default(cuid())
+  invoiceNumber String      @unique
+  orderId       String      @unique
+  order         Order       @relation(fields: [orderId], references: [id])
+  distributorId String
+  distributor   Distributor @relation(fields: [distributorId], references: [id])
+  amount        Float
+  dueDate       DateTime
+  isPaid        Boolean     @default(false)
+  paidAt        DateTime?
+  createdAt     DateTime    @default(now())
+
+  payments Payment[]
+
+  @@index([distributorId])
+  @@index([isPaid])
+}
+
+model Payment {
+  id            String      @id @default(cuid())
+  invoiceId     String
+  invoice       Invoice     @relation(fields: [invoiceId], references: [id])
+  distributorId String
+  distributor   Distributor @relation(fields: [distributorId], references: [id])
+  amount        Float
+  method        String      // BANK_TRANSFER, CHEQUE, CASH, ONLINE
+  reference     String?
+  paidAt        DateTime    @default(now())
+
+  @@index([invoiceId])
+  @@index([distributorId])
+}
+
+// ==========================================
+// ROUTE-TO-MARKET
+// ==========================================
+
+model Route {
+  id            String    @id @default(cuid())
+  name          String
+  territoryId   String
+  territory     Territory @relation(fields: [territoryId], references: [id])
+  waypoints     Json      // Array of {lat, lng, outletId, order}
+  totalDistance  Float?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+
+  callPlans CallPlan[]
+
+  @@index([territoryId])
+}
+
+// ==========================================
+// MERCHANDISING
+// ==========================================
+
+model ShelfAudit {
+  id              String   @id @default(cuid())
+  outletId        String
+  outlet          Outlet   @relation(fields: [outletId], references: [id])
+  auditDate       DateTime
+  auditorId       String
+  photoUrls       Json     // JSON array of photo URLs
+  shareOfShelf    Float?
+  isCompliant     Boolean  @default(false)
+  outOfStock      Boolean  @default(false)
+  competitorNotes String?  @db.Text
+  createdAt       DateTime @default(now())
+
+  @@index([outletId])
+  @@index([auditDate])
+}
+
+// ==========================================
+// HR & ATTENDANCE
+// ==========================================
+
+enum AttendanceType {
+  PRESENT
+  ABSENT
+  LEAVE
+  HALF_DAY
+  TOUR
+}
+
+model Attendance {
+  id           String         @id @default(cuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
+  date         DateTime       @db.Date
+  type         AttendanceType @default(PRESENT)
+  checkInTime  DateTime?
+  checkOutTime DateTime?
+  checkInLat   Float?
+  checkInLng   Float?
+  totalHours   Float?
+  createdAt    DateTime       @default(now())
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@index([date])
+}
+
+enum ExpenseStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Expense {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  date        DateTime
+  category    String        // FUEL, FOOD, HOTEL, TRANSPORT, OTHER
+  amount      Float
+  description String?       @db.Text
+  receiptUrl  String?
+  status      ExpenseStatus @default(PENDING)
+  approvedBy  String?
+  approvedAt  DateTime?
+  createdAt   DateTime      @default(now())
+
+  @@index([userId])
+  @@index([status])
+  @@index([date])
+}
+
+// ==========================================
+// PRESCRIPTION TRACKING
+// ==========================================
+
+model Prescription {
+  id        String   @id @default(cuid())
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  productId String
+  month     DateTime
+  rxCount   Int
+  createdAt DateTime @default(now())
+
+  @@unique([doctorId, productId, month])
+  @@index([doctorId])
+}
+
+// ==========================================
+// NOTIFICATIONS & AUDIT
+// ==========================================
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String   @db.Text
+  type      String   // ORDER, VISIT, ALERT, SYSTEM
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String   // CREATE, UPDATE, DELETE, LOGIN, LOGOUT
+  entity    String   // Order, User, Doctor, etc.
+  entityId  String?
+  oldData   Json?
+  newData   Json?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([entity])
+  @@index([createdAt])
+}
